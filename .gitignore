@@ -29,6 +29,7 @@ _testmain.go
 *.exe
 *.exe~
 
+.vscode/
 tmp/
 nohup.out
 metal

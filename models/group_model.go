@@ -32,9 +32,9 @@ func (group *Groups) GetGroupByUserId(userId uint) ([]Role, error) {
 	o := orm.NewOrm()
 	var userGroups []Role
 	//var userGroups []orm.Params//orm.Params是一个map类型
-	_, err := o.Raw(`SELECT role.groups from role
-		INNER JOIN groups ON role.id = groups.role_id
-		WHERE groups.user_id = ?;`, userId).QueryRows(&userGroups)
+	_, err := o.Raw(`SELECT role.authority from role
+		INNER JOIN authority ON role.id = authority.role_id
+		WHERE authority.user_id = ?;`, userId).QueryRows(&userGroups)
 	if nil != err {
 		return nil, err
 	}

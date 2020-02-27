@@ -7,8 +7,8 @@ import (
 
 type Role struct {
 	BaseModel
-	Description string `json:"description"`
-	Groups      string `json:"groups"`
+	Description    string `json:"description"`
+	Authority      string `json:"authority"`
 }
 
 type UserGroups struct {
@@ -35,7 +35,7 @@ func (role *Role) GetRolesAndUserPermission(userId int) (allRoles []Role, userRo
 	}()
 	go func() {
 		defer wg.Done()
-		_, err := o.Raw("SELECT role_id FROM groups WHERE user_id = ? ORDER BY id DESC;", userId).QueryRows(&userRoles)
+		_, err := o.Raw("SELECT role_id FROM authority WHERE user_id = ? ORDER BY id DESC;", userId).QueryRows(&userRoles)
 		if nil != err {
 			returnErr = err
 		}

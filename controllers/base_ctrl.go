@@ -17,6 +17,8 @@ type any = interface{}
 // 前端权限验证
 var HasIndexPermission = func(ctx *context.Context) {
 	// TODO 做一些验证
+	var i int = 10
+	print(i)
 }
 
 // 自定义404错误页面

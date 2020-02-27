@@ -44,7 +44,7 @@ func (c *AdminController) ToLogin() {
 		}
 		var privileges []string
 		for _, v := range roleList {
-			strArr := strings.Split(v.Groups, ",")
+			strArr := strings.Split(v.Authority, ",")
 			privileges = append(privileges, strArr...)
 		}
 		userPermission := new(UserPermission)

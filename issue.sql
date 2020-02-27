@@ -117,29 +117,29 @@ INSERT INTO `features` VALUES ('6', '用户管理', '2017-11-18 15:29:19', '2017
 INSERT INTO `features` VALUES ('7', '财务工作站', '2017-11-18 15:31:06', '2017-11-18 15:31:09');
 
 -- ----------------------------
--- Table structure for `groups`
+-- Table structure for `authority`
 -- ----------------------------
-DROP TABLE IF EXISTS `groups`;
-CREATE TABLE `groups` (
+DROP TABLE IF EXISTS `authority`;
+CREATE TABLE `authority` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_user_group` (`user_id`,`role_id`)
+  UNIQUE KEY `idx_user_authority` (`user_id`,`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- ----------------------------
--- Records of groups
+-- Records of authority
 -- ----------------------------
-INSERT INTO `groups` VALUES ('6', '2', '3', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
-INSERT INTO `groups` VALUES ('7', '2', '1', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
-INSERT INTO `groups` VALUES ('8', '2', '2', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
-INSERT INTO `groups` VALUES ('9', '2', '4', '2018-06-11 13:10:25', '2018-06-11 13:10:28');
-INSERT INTO `groups` VALUES ('10', '2', '5', '2018-06-11 13:10:38', '2018-06-11 13:10:40');
-INSERT INTO `groups` VALUES ('11', '2', '6', '2018-06-11 13:10:50', '2018-06-11 13:10:55');
-INSERT INTO `groups` VALUES ('12', '1', '3', '2018-11-01 01:31:22', '2018-11-01 01:31:22');
+INSERT INTO `authority` VALUES ('6', '1', '3', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
+INSERT INTO `authority` VALUES ('7', '1', '1', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
+INSERT INTO `authority` VALUES ('8', '1', '2', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
+INSERT INTO `authority` VALUES ('9', '1', '4', '2018-06-11 13:10:25', '2018-06-11 13:10:28');
+INSERT INTO `authority` VALUES ('10', '1', '5', '2018-06-11 13:10:38', '2018-06-11 13:10:40');
+INSERT INTO `authority` VALUES ('11', '1', '6', '2018-06-11 13:10:50', '2018-06-11 13:10:55');
+INSERT INTO `authority` VALUES ('12', '2', '3', '2018-11-01 01:31:22', '2018-11-01 01:31:22');
 
 -- ----------------------------
 -- Table structure for `helper_feature_relation`
@@ -579,7 +579,7 @@ CREATE TABLE `people_feature_relation` (
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `groups` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
+  `authority` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
   `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '说明',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -589,12 +589,12 @@ CREATE TABLE `role` (
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', 'UserController:UserList,UserController:UserListRoute', '管理员', '2018-04-21 14:00:18', '2018-04-21 14:00:23');
-INSERT INTO `role` VALUES ('2', 'UserController:UserListRoute', '普通管理员', '2018-04-21 14:00:15', '2018-04-21 14:00:21');
-INSERT INTO `role` VALUES ('3', 'UserController:POST', '添加用户', '2018-04-20 13:29:49', '2018-04-20 13:29:52');
-INSERT INTO `role` VALUES ('4', 'UserController:PUT', '编辑用户', '2018-06-11 13:05:02', '2018-06-11 13:05:05');
-INSERT INTO `role` VALUES ('5', 'UserController:DeleteUser', '删除用户', '2018-06-11 13:07:02', '2018-06-11 13:07:07');
-INSERT INTO `role` VALUES ('6', 'UserController:UserList', '用户列表', '2018-06-11 13:09:09', '2018-06-11 13:09:12');
+INSERT INTO `role` VALUES ('1', 'AdminController:UserList,AdminController:UserListRoute', '管理员', '2018-04-21 14:00:18', '2018-04-21 14:00:23');
+INSERT INTO `role` VALUES ('2', 'AdminController:UserListRoute', '普通管理员', '2018-04-21 14:00:15', '2018-04-21 14:00:21');
+INSERT INTO `role` VALUES ('3', 'AdminController:POST', '添加用户', '2018-04-20 13:29:49', '2018-04-20 13:29:52');
+INSERT INTO `role` VALUES ('4', 'AdminController:PUT', '编辑用户', '2018-06-11 13:05:02', '2018-06-11 13:05:05');
+INSERT INTO `role` VALUES ('5', 'AdminController:DeleteUser', '删除用户', '2018-06-11 13:07:02', '2018-06-11 13:07:07');
+INSERT INTO `role` VALUES ('6', 'AdminController:UserList', '用户列表', '2018-06-11 13:09:09', '2018-06-11 13:09:12');
 
 -- ----------------------------
 -- Table structure for `user`
@@ -619,11 +619,11 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '13477889900', '犬夜叉', '960232f4a37f948b480a3f8a5512c6f8', '1', '13477889900@139.com', '日暮神社', '0', '半妖', '2018-03-17 20:46:31', '2018-11-01 01:31:17');
-INSERT INTO `user` VALUES ('2', '18701897513', '月盾', 'abc72b24857be42850f67d3160f8710e', '1', '18701897513@139.com', '上海', '1', 'golang开发者', '2018-03-17 20:49:44', '2018-06-11 12:56:34');
-INSERT INTO `user` VALUES ('5', '18701893513', '施工图人力', 'abc72b24857be42850f67d3160f8710e', '1', '18611118146@139.com', '看见的任何司空见惯和', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
-INSERT INTO `user` VALUES ('8', '10701897527', '缇欧', '8fa2952fff72d92c98f9f43e46dfc6bd', '0', 'huo@gmail.com', '吉林大街好地方', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
-INSERT INTO `user` VALUES ('9', '10706597527', '瑞泰居', '8fa2952fff72d92c98f9f43e46dfc6bd', '0', '438473@qq.com', '连接哦哦发给你基地', '1', '收到了架构过人家饿啊人工', '2017-07-29 10:38:06', '2018-04-06 17:02:03');
+INSERT INTO `user` VALUES ('1', 'admin', '犬夜叉', '21232f297a57a5a743894a0e4a801fc3', '1', '13477889900@139.com', '日暮神社', '1', '半妖', '2018-03-17 20:46:31', '2018-11-01 01:31:17');
+INSERT INTO `user` VALUES ('2', 'user1', '月盾', '21232f297a57a5a743894a0e4a801fc3', '1', '18701897513@139.com', '上海', '1', 'golang开发者', '2018-03-17 20:49:44', '2018-06-11 12:56:34');
+INSERT INTO `user` VALUES ('5', 'user2', '施工图人力', '21232f297a57a5a743894a0e4a801fc3', '1', '18611118146@139.com', '看见的任何司空见惯和', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
+INSERT INTO `user` VALUES ('8', '10701897527', '缇欧', '21232f297a57a5a743894a0e4a801fc3', '0', 'huo@gmail.com', '吉林大街好地方', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
+INSERT INTO `user` VALUES ('9', '10706597527', '瑞泰居', '21232f297a57a5a743894a0e4a801fc3', '0', '438473@qq.com', '连接哦哦发给你基地', '1', '收到了架构过人家饿啊人工', '2017-07-29 10:38:06', '2018-04-06 17:02:03');
 INSERT INTO `user` VALUES ('13', '18701497527', '杀生丸', '8fa2952fff72d92c98f9f43e46dfc6bd', '1', 'hp@sina.com', '送就送山东黄金人数', '1', '视频国际投行饿哦日后我如何进入', '2018-02-05 04:20:37', '2018-12-02 20:38:37');
 INSERT INTO `user` VALUES ('14', '12345678909', '珊瑚', '5335412ee0f17806e1017e607149336a', '0', 'ligh@163.com', '很快就都大佛开盘后具体要', '1', '我感觉哦过仁和堂撒今天', '2018-02-05 08:07:37', '2018-04-06 17:03:04');
 INSERT INTO `user` VALUES ('21', '18721897527', '让大哥', '8fa2952fff72d92c98f9f43e46dfc6bd', '1', '18611118146@139.com', '送就送山东黄金人数几乎是丢改好', '1', '就fdfda', '2018-02-11 07:53:18', '2018-10-24 11:43:07');
