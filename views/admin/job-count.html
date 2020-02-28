@@ -135,8 +135,10 @@ desired effect
     <script>
         $(function () {
             //最近一个月走势
-            var startDate = moment().subtract(2, "months").format("YYYY-MM-DD");
-            var endDate = moment().format("YYYY-MM-DD");
+            //var startDate = moment().subtract(2, "months").format("YYYY-MM-DD");
+            //var endDate = moment().format("YYYY-MM-DD");
+            var startDate = "2018-02-01 00:00:00";
+            var endDate = "2018-06-01 00:00:00";
             $.when(
                 $.get("/admin/job-count/count-data-recently?language=nodejs&startDate=" + startDate + "&endDate=" + endDate),
                 $.get("/admin/job-count/count-data-recently?language=golang&startDate=" + startDate + "&endDate=" + endDate)

@@ -4,16 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/astaxie/beego/logs"
-	"log"
 	. "metal/models" // 点操作符导入的包可以省略包名直接使用公有属性和方法
-	"metal/service"
 	"metal/util"
-	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/astaxie/beego"
 )
 
 type AdminController struct {
@@ -23,6 +18,7 @@ type AdminController struct {
 func (c *AdminController) Login() {
 	c.TplName = "admin/login.html"
 }
+
 func (c *AdminController) ToLogin() {
 	var mobile = c.GetString("mobile")
 	var password = c.GetString("password")
@@ -267,202 +263,4 @@ func (c *AdminController) GetLogs() {
 		c.Data["json"] = SuccessData(data)
 	}
 	c.ServeJSON()
-}
-
-/**
- * 创建文章路由
- */
-// @router /article-route [get]
-func (c *AdminController) CreateArticleRoute() {
-	c.TplName = "admin/article-create.html"
-}
-
-/**
- * 创建文章接口
- */
-// @router /article [post]
-func (c *AdminController) CreateArticle() {
-	defer func() {
-		if err := recover(); err != nil {
-			c.Data["json"] = ErrorMsg(err.(string))
-		}
-		c.ServeJSON()
-	}()
-	title := c.GetString("title")
-	if title == "" {
-		log.Panic("title不能为空")
-	}
-	content := c.GetString("content")
-	if content == "" {
-		log.Panic("content不能为空")
-	}
-	article := new(Article)
-	article.Title = title
-	article.Content = content
-	article.Status = 1
-	article.CreatedAt = time.Now()
-	article.UpdatedAt = time.Now()
-	articleService := service.NewService()
-	_, err := articleService.Save(article)
-	if nil != err {
-		logs.Error(err)
-		c.Data["json"] = ErrorData(err)
-	} else {
-		c.Data["json"] = SuccessData(nil)
-	}
-	c.ServeJSON()
-}
-
-/**
- * 文章列表路由
- */
-//@router /articles-route [get]
-func (c *AdminController) ArticlesRoute() {
-	c.TplName = "admin/article-list.html"
-}
-
-/**
- * 文章列表接口
- * /admin/articles
- */
-//@router /articles
-func (c *AdminController) ArticlesList() {
-	args := c.GetString("search") // 获取所有参数
-	start, _ := c.GetInt("start")
-	perPage, _ := c.GetInt("perPage")
-	article := new(Article)
-	param := map[string]string{
-		"status": "1,0",
-		"title":  args,
-	}
-
-	list, total, err := article.GetArticlesByCondition(param, start, perPage)
-	if nil != err {
-		logs.Error(err)
-		c.Data["json"] = ErrorData(err)
-	} else {
-		data := map[string]any{
-			"result": list,
-			"total":  total,
-		}
-		c.Data["json"] = SuccessData(data)
-	}
-	c.ServeJSON()
-}
-
-/**
- * 编辑文章路由
- * /admin/articles
- */
-//@router /article-edit-route/:id [get]
-func (c *AdminController) ArticleEditRoute() {
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	article.Id = uint(artId)
-	article.GetById()
-	c.Data["article"] = article
-	c.TplName = "admin/article-edit.html"
-}
-
-/**
- * 修改文章接口
- * /admin/article/:id
- */
-//@router /article/:id [put]
-func (c *AdminController) ArticleEdit() {
-	defer func() {
-		if err := recover(); err != nil {
-			c.Data["json"] = ErrorData(err.(error))
-			c.ServeJSON()
-		}
-	}()
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	title := c.GetString("title")
-	content := c.GetString("content")
-	article.Id = uint(artId)
-	article.Title = title
-	article.Content = content
-	article.UpdatedAt = time.Now()
-	_, err := article.Update()
-	if err != nil {
-		c.Data["json"] = ErrorData(err.(error))
-		c.ServeJSON()
-		return
-	}
-	c.Data["json"] = SuccessData(nil)
-	c.ServeJSON()
-}
-
-/**
- * 删除文章接口
- * /admin/articles
- */
-//@router /article/:id [delete]
-func (c *AdminController) ArticleDelete() {
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	article.Id = uint(artId)
-	article.Delete()
-	c.Data["json"] = SuccessData(nil)
-	c.ServeJSON()
-}
-
-/**
- * 上传图片
- * /admin/uploadImg
- */
-//@router /uploadImg [post]
-func (c *AdminController) UploadImg() {
-	file, h, err := c.GetFile("editormd-image-file")
-	if err != nil {
-		log.Fatal("getfile err ", err)
-	}
-	defer file.Close()
-	_, derr := os.Stat("tmp/upload")
-	if derr != nil {
-		os.Mkdir("tmp/upload", os.ModePerm)
-	}
-
-	fileName := "tmp/upload/" + h.Filename
-	err = c.SaveToFile("editormd-image-file", fileName)
-	if err != nil {
-		c.Data["json"] = map[string]any{
-			"success": 0,
-			"message": err.Error(),
-		}
-	} else {
-		//接收成功上传到七牛
-		ret, err := util.UploadFile(fileName, h.Filename)
-		if err != nil {
-			c.Data["json"] = map[string]any{
-				"success": 0,
-				"message": err,
-				"url":     fileName,
-			}
-			c.ServeJSON()
-			return
-		}
-		//上传到七牛后删除本地文件
-		localFile, err := os.Open(fileName)
-		defer localFile.Close()
-		if err != nil {
-			log.Fatal(err.Error())
-		}
-		if err := localFile.Close(); err != nil {
-			log.Fatal(err)
-		}
-		os.Remove(fileName)
-		c.Data["json"] = map[string]any{
-			"success": 1,
-			"message": "ok",
-			"url":     beego.AppConfig.String("qiniuUrl") + ret.Key,
-		}
-		c.ServeJSON()
-	}
-}
-// 通讯录
-//@router /pname/view [get]
-func (c *AdminController) PNameView() {
-	c.TplName = "admin/pname.html"
 }

@@ -38,6 +38,7 @@ func (jobCount *JobCount) GetCountData(lang, startDate, endDate string) ([]JobCo
 		sql += fmt.Sprintf("AND created_at >= '%s' AND created_at <= '%s'", startDate, endDate)
 	}
 	num, err := o.Raw(sql).QueryRows(&jobCounts)
+	logs.Info(sql)
 	logs.Info("查询到", num, "条数据")
 	return jobCounts, err
 }

@@ -27,7 +27,7 @@ CREATE TABLE `article` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of article
@@ -117,31 +117,6 @@ INSERT INTO `features` VALUES ('6', '用户管理', '2017-11-18 15:29:19', '2017
 INSERT INTO `features` VALUES ('7', '财务工作站', '2017-11-18 15:31:06', '2017-11-18 15:31:09');
 
 -- ----------------------------
--- Table structure for `authority`
--- ----------------------------
-DROP TABLE IF EXISTS `authority`;
-CREATE TABLE `authority` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) NOT NULL,
-  `role_id` int(11) NOT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_user_authority` (`user_id`,`role_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- ----------------------------
--- Records of authority
--- ----------------------------
-INSERT INTO `authority` VALUES ('6', '1', '3', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
-INSERT INTO `authority` VALUES ('7', '1', '1', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
-INSERT INTO `authority` VALUES ('8', '1', '2', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
-INSERT INTO `authority` VALUES ('9', '1', '4', '2018-06-11 13:10:25', '2018-06-11 13:10:28');
-INSERT INTO `authority` VALUES ('10', '1', '5', '2018-06-11 13:10:38', '2018-06-11 13:10:40');
-INSERT INTO `authority` VALUES ('11', '1', '6', '2018-06-11 13:10:50', '2018-06-11 13:10:55');
-INSERT INTO `authority` VALUES ('12', '2', '3', '2018-11-01 01:31:22', '2018-11-01 01:31:22');
-
--- ----------------------------
 -- Table structure for `helper_feature_relation`
 -- ----------------------------
 DROP TABLE IF EXISTS `helper_feature_relation`;
@@ -186,12 +161,12 @@ INSERT INTO `helpers` VALUES ('2', '李四', '12222222222', '12222222222@163.com
 DROP TABLE IF EXISTS `job_count`;
 CREATE TABLE `job_count` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `job_title` varchar(30) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '职位名称，开发语言',
-  `region` varchar(10) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '地区',
+  `job_title` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '职位名称，开发语言',
+  `region` varchar(10) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '地区',
   `amount` int(11) NOT NULL DEFAULT '0' COMMENT '职位数',
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=323 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
 -- Records of job_count
@@ -255,244 +230,6 @@ INSERT INTO `job_count` VALUES ('56', 'golang', '上海', '168', '2018-07-09 12:
 INSERT INTO `job_count` VALUES ('57', 'nodejs', '上海', '125', '2018-07-10 12:00:01');
 INSERT INTO `job_count` VALUES ('58', 'golang', '上海', '172', '2018-07-10 12:00:01');
 INSERT INTO `job_count` VALUES ('59', 'golang', '上海', '174', '2018-07-11 12:00:01');
-INSERT INTO `job_count` VALUES ('60', 'nodejs', '上海', '129', '2018-07-11 12:00:01');
-INSERT INTO `job_count` VALUES ('61', 'nodejs', '上海', '123', '2018-07-12 12:00:01');
-INSERT INTO `job_count` VALUES ('62', 'golang', '上海', '175', '2018-07-12 12:00:01');
-INSERT INTO `job_count` VALUES ('63', 'golang', '上海', '177', '2018-07-13 12:00:01');
-INSERT INTO `job_count` VALUES ('64', 'nodejs', '上海', '121', '2018-07-13 12:00:01');
-INSERT INTO `job_count` VALUES ('65', 'golang', '上海', '176', '2018-07-14 12:00:01');
-INSERT INTO `job_count` VALUES ('66', 'nodejs', '上海', '121', '2018-07-14 12:00:01');
-INSERT INTO `job_count` VALUES ('67', 'nodejs', '上海', '118', '2018-07-15 12:00:01');
-INSERT INTO `job_count` VALUES ('68', 'golang', '上海', '174', '2018-07-15 12:00:01');
-INSERT INTO `job_count` VALUES ('69', 'golang', '上海', '173', '2018-07-16 12:00:01');
-INSERT INTO `job_count` VALUES ('70', 'nodejs', '上海', '121', '2018-07-16 12:00:01');
-INSERT INTO `job_count` VALUES ('71', 'golang', '上海', '173', '2018-07-17 12:00:01');
-INSERT INTO `job_count` VALUES ('72', 'nodejs', '上海', '120', '2018-07-17 12:00:01');
-INSERT INTO `job_count` VALUES ('73', 'golang', '上海', '175', '2018-07-18 12:00:01');
-INSERT INTO `job_count` VALUES ('74', 'nodejs', '上海', '121', '2018-07-18 12:00:01');
-INSERT INTO `job_count` VALUES ('75', 'nodejs', '上海', '126', '2018-07-19 12:00:01');
-INSERT INTO `job_count` VALUES ('76', 'golang', '上海', '176', '2018-07-19 12:00:01');
-INSERT INTO `job_count` VALUES ('77', 'golang', '上海', '178', '2018-07-20 12:00:02');
-INSERT INTO `job_count` VALUES ('78', 'nodejs', '上海', '123', '2018-07-20 12:00:02');
-INSERT INTO `job_count` VALUES ('79', 'golang', '上海', '178', '2018-07-21 12:00:01');
-INSERT INTO `job_count` VALUES ('80', 'nodejs', '上海', '124', '2018-07-21 12:00:01');
-INSERT INTO `job_count` VALUES ('81', 'nodejs', '上海', '125', '2018-07-22 12:00:01');
-INSERT INTO `job_count` VALUES ('82', 'golang', '上海', '179', '2018-07-22 12:00:01');
-INSERT INTO `job_count` VALUES ('83', 'nodejs', '上海', '126', '2018-07-23 12:00:01');
-INSERT INTO `job_count` VALUES ('84', 'golang', '上海', '179', '2018-07-23 12:00:02');
-INSERT INTO `job_count` VALUES ('85', 'golang', '上海', '179', '2018-07-24 12:00:01');
-INSERT INTO `job_count` VALUES ('86', 'nodejs', '上海', '128', '2018-07-24 12:00:01');
-INSERT INTO `job_count` VALUES ('87', 'golang', '上海', '181', '2018-07-25 12:00:01');
-INSERT INTO `job_count` VALUES ('88', 'nodejs', '上海', '124', '2018-07-25 12:00:01');
-INSERT INTO `job_count` VALUES ('89', 'golang', '上海', '181', '2018-07-26 12:00:01');
-INSERT INTO `job_count` VALUES ('90', 'nodejs', '上海', '124', '2018-07-26 12:00:01');
-INSERT INTO `job_count` VALUES ('91', 'golang', '上海', '181', '2018-07-27 12:00:01');
-INSERT INTO `job_count` VALUES ('92', 'nodejs', '上海', '124', '2018-07-27 12:00:01');
-INSERT INTO `job_count` VALUES ('93', 'golang', '上海', '184', '2018-07-28 12:00:01');
-INSERT INTO `job_count` VALUES ('94', 'nodejs', '上海', '125', '2018-07-28 12:00:01');
-INSERT INTO `job_count` VALUES ('95', 'golang', '上海', '184', '2018-07-29 12:00:01');
-INSERT INTO `job_count` VALUES ('96', 'nodejs', '上海', '125', '2018-07-29 12:00:01');
-INSERT INTO `job_count` VALUES ('97', 'nodejs', '上海', '126', '2018-07-30 12:00:01');
-INSERT INTO `job_count` VALUES ('98', 'golang', '上海', '187', '2018-07-30 12:00:01');
-INSERT INTO `job_count` VALUES ('99', 'nodejs', '上海', '127', '2018-07-31 12:00:01');
-INSERT INTO `job_count` VALUES ('100', 'golang', '上海', '191', '2018-07-31 12:00:01');
-INSERT INTO `job_count` VALUES ('117', 'nodejs', '上海', '1271', '2018-08-11 12:01:24');
-INSERT INTO `job_count` VALUES ('118', 'golang', '上海', '1308', '2018-08-11 12:01:24');
-INSERT INTO `job_count` VALUES ('119', 'nodejs', '上海', '1229', '2018-09-02 12:01:24');
-INSERT INTO `job_count` VALUES ('120', 'golang', '上海', '1269', '2018-09-02 12:01:24');
-INSERT INTO `job_count` VALUES ('121', 'golang', '上海', '1263', '2018-09-09 12:00:01');
-INSERT INTO `job_count` VALUES ('122', 'nodejs', '上海', '1201', '2018-09-09 12:00:01');
-INSERT INTO `job_count` VALUES ('123', 'nodejs', '上海', '1199', '2018-09-10 12:00:01');
-INSERT INTO `job_count` VALUES ('124', 'golang', '上海', '1256', '2018-09-10 12:00:01');
-INSERT INTO `job_count` VALUES ('125', 'nodejs', '上海', '1206', '2018-09-11 12:00:01');
-INSERT INTO `job_count` VALUES ('126', 'golang', '上海', '1265', '2018-09-11 12:00:01');
-INSERT INTO `job_count` VALUES ('127', 'nodejs', '上海', '1227', '2018-09-12 12:00:01');
-INSERT INTO `job_count` VALUES ('128', 'golang', '上海', '1290', '2018-09-12 12:00:01');
-INSERT INTO `job_count` VALUES ('129', 'golang', '上海', '1282', '2018-09-13 12:00:01');
-INSERT INTO `job_count` VALUES ('130', 'nodejs', '上海', '1213', '2018-09-13 12:00:01');
-INSERT INTO `job_count` VALUES ('131', 'nodejs', '上海', '1212', '2018-09-14 12:00:01');
-INSERT INTO `job_count` VALUES ('132', 'golang', '上海', '1280', '2018-09-14 12:00:02');
-INSERT INTO `job_count` VALUES ('133', 'golang', '上海', '1274', '2018-09-15 12:00:01');
-INSERT INTO `job_count` VALUES ('134', 'nodejs', '上海', '1199', '2018-09-15 12:00:01');
-INSERT INTO `job_count` VALUES ('135', 'golang', '上海', '1271', '2018-09-16 12:00:01');
-INSERT INTO `job_count` VALUES ('136', 'nodejs', '上海', '1196', '2018-09-16 12:00:01');
-INSERT INTO `job_count` VALUES ('137', 'golang', '上海', '1269', '2018-09-17 12:00:01');
-INSERT INTO `job_count` VALUES ('138', 'nodejs', '上海', '1188', '2018-09-17 12:00:01');
-INSERT INTO `job_count` VALUES ('139', 'nodejs', '上海', '1199', '2018-09-18 12:00:01');
-INSERT INTO `job_count` VALUES ('140', 'golang', '上海', '1282', '2018-09-18 12:00:02');
-INSERT INTO `job_count` VALUES ('141', 'nodejs', '上海', '1209', '2018-09-19 12:00:01');
-INSERT INTO `job_count` VALUES ('142', 'golang', '上海', '1290', '2018-09-19 12:00:01');
-INSERT INTO `job_count` VALUES ('143', 'golang', '上海', '1279', '2018-09-20 12:00:01');
-INSERT INTO `job_count` VALUES ('144', 'nodejs', '上海', '1207', '2018-09-20 12:00:01');
-INSERT INTO `job_count` VALUES ('145', 'nodejs', '上海', '1195', '2018-09-21 12:00:02');
-INSERT INTO `job_count` VALUES ('146', 'golang', '上海', '1258', '2018-09-21 12:00:02');
-INSERT INTO `job_count` VALUES ('147', 'golang', '上海', '1261', '2018-09-22 12:00:01');
-INSERT INTO `job_count` VALUES ('148', 'nodejs', '上海', '1205', '2018-09-22 12:00:01');
-INSERT INTO `job_count` VALUES ('149', 'golang', '上海', '1252', '2018-09-23 12:00:01');
-INSERT INTO `job_count` VALUES ('150', 'nodejs', '上海', '1188', '2018-09-23 12:00:01');
-INSERT INTO `job_count` VALUES ('151', 'nodejs', '上海', '1179', '2018-09-24 12:00:01');
-INSERT INTO `job_count` VALUES ('152', 'golang', '上海', '1249', '2018-09-24 12:00:01');
-INSERT INTO `job_count` VALUES ('153', 'golang', '上海', '1250', '2018-09-25 12:00:01');
-INSERT INTO `job_count` VALUES ('154', 'nodejs', '上海', '1183', '2018-09-25 12:00:01');
-INSERT INTO `job_count` VALUES ('155', 'golang', '上海', '1248', '2018-09-26 12:00:01');
-INSERT INTO `job_count` VALUES ('156', 'nodejs', '上海', '1192', '2018-09-26 12:00:01');
-INSERT INTO `job_count` VALUES ('157', 'golang', '上海', '1246', '2018-09-27 12:00:01');
-INSERT INTO `job_count` VALUES ('158', 'nodejs', '上海', '1190', '2018-09-27 12:00:01');
-INSERT INTO `job_count` VALUES ('159', 'golang', '上海', '1242', '2018-09-28 12:00:01');
-INSERT INTO `job_count` VALUES ('160', 'nodejs', '上海', '1191', '2018-09-28 12:00:01');
-INSERT INTO `job_count` VALUES ('161', 'nodejs', '上海', '1186', '2018-09-29 12:00:01');
-INSERT INTO `job_count` VALUES ('162', 'golang', '上海', '1246', '2018-09-29 12:00:01');
-INSERT INTO `job_count` VALUES ('163', 'golang', '上海', '1240', '2018-09-30 12:00:01');
-INSERT INTO `job_count` VALUES ('164', 'nodejs', '上海', '1170', '2018-09-30 12:00:01');
-INSERT INTO `job_count` VALUES ('165', 'nodejs', '上海', '1158', '2018-10-01 12:00:01');
-INSERT INTO `job_count` VALUES ('166', 'golang', '上海', '1236', '2018-10-01 12:00:01');
-INSERT INTO `job_count` VALUES ('167', 'nodejs', '上海', '1154', '2018-10-02 12:00:01');
-INSERT INTO `job_count` VALUES ('168', 'golang', '上海', '1236', '2018-10-02 12:00:01');
-INSERT INTO `job_count` VALUES ('169', 'golang', '上海', '1239', '2018-10-03 12:00:01');
-INSERT INTO `job_count` VALUES ('170', 'nodejs', '上海', '1152', '2018-10-03 12:00:01');
-INSERT INTO `job_count` VALUES ('171', 'golang', '上海', '1216', '2018-10-04 12:00:01');
-INSERT INTO `job_count` VALUES ('172', 'nodejs', '上海', '1135', '2018-10-04 12:00:01');
-INSERT INTO `job_count` VALUES ('173', 'nodejs', '上海', '1123', '2018-10-05 12:00:01');
-INSERT INTO `job_count` VALUES ('174', 'golang', '上海', '1194', '2018-10-05 12:00:01');
-INSERT INTO `job_count` VALUES ('175', 'nodejs', '上海', '1111', '2018-10-06 12:00:01');
-INSERT INTO `job_count` VALUES ('176', 'golang', '上海', '1180', '2018-10-06 12:00:01');
-INSERT INTO `job_count` VALUES ('177', 'golang', '上海', '1173', '2018-10-07 12:00:01');
-INSERT INTO `job_count` VALUES ('178', 'nodejs', '上海', '1102', '2018-10-07 12:00:02');
-INSERT INTO `job_count` VALUES ('179', 'golang', '上海', '1170', '2018-10-08 12:00:01');
-INSERT INTO `job_count` VALUES ('180', 'nodejs', '上海', '1096', '2018-10-08 12:00:02');
-INSERT INTO `job_count` VALUES ('181', 'nodejs', '上海', '1109', '2018-10-09 12:00:01');
-INSERT INTO `job_count` VALUES ('182', 'golang', '上海', '1181', '2018-10-09 12:00:01');
-INSERT INTO `job_count` VALUES ('183', 'nodejs', '上海', '1125', '2018-10-10 12:00:01');
-INSERT INTO `job_count` VALUES ('184', 'golang', '上海', '1201', '2018-10-10 12:00:01');
-INSERT INTO `job_count` VALUES ('185', 'nodejs', '上海', '1126', '2018-10-11 12:00:00');
-INSERT INTO `job_count` VALUES ('186', 'golang', '上海', '1127', '2018-10-11 12:00:00');
-INSERT INTO `job_count` VALUES ('187', 'nodejs', '上海', '1120', '2018-10-12 12:00:01');
-INSERT INTO `job_count` VALUES ('188', 'golang', '上海', '1189', '2018-10-12 12:00:01');
-INSERT INTO `job_count` VALUES ('189', 'nodejs', '上海', '1111', '2018-10-13 12:00:01');
-INSERT INTO `job_count` VALUES ('190', 'golang', '上海', '1180', '2018-10-13 12:00:02');
-INSERT INTO `job_count` VALUES ('191', 'golang', '上海', '1163', '2018-10-14 12:00:01');
-INSERT INTO `job_count` VALUES ('192', 'nodejs', '上海', '1103', '2018-10-14 12:00:01');
-INSERT INTO `job_count` VALUES ('193', 'golang', '上海', '1154', '2018-10-15 12:00:01');
-INSERT INTO `job_count` VALUES ('194', 'nodejs', '上海', '1101', '2018-10-15 12:00:01');
-INSERT INTO `job_count` VALUES ('195', 'golang', '上海', '1170', '2018-10-16 12:00:01');
-INSERT INTO `job_count` VALUES ('196', 'nodejs', '上海', '1099', '2018-10-16 12:00:01');
-INSERT INTO `job_count` VALUES ('197', 'nodejs', '上海', '1099', '2018-10-17 12:00:01');
-INSERT INTO `job_count` VALUES ('198', 'golang', '上海', '1170', '2018-10-17 12:00:01');
-INSERT INTO `job_count` VALUES ('199', 'golang', '上海', '1167', '2018-10-18 12:00:01');
-INSERT INTO `job_count` VALUES ('200', 'nodejs', '上海', '1085', '2018-10-18 12:00:01');
-INSERT INTO `job_count` VALUES ('201', 'golang', '上海', '1171', '2018-10-19 12:00:02');
-INSERT INTO `job_count` VALUES ('202', 'nodejs', '上海', '1075', '2018-10-19 12:00:02');
-INSERT INTO `job_count` VALUES ('203', 'golang', '上海', '1155', '2018-10-20 12:00:01');
-INSERT INTO `job_count` VALUES ('204', 'nodejs', '上海', '1076', '2018-10-20 12:00:01');
-INSERT INTO `job_count` VALUES ('205', 'golang', '上海', '1144', '2018-10-21 12:00:02');
-INSERT INTO `job_count` VALUES ('206', 'nodejs', '上海', '1063', '2018-10-21 12:00:02');
-INSERT INTO `job_count` VALUES ('207', 'nodejs', '上海', '1064', '2018-10-22 12:00:01');
-INSERT INTO `job_count` VALUES ('208', 'golang', '上海', '1139', '2018-10-22 12:00:01');
-INSERT INTO `job_count` VALUES ('209', 'nodejs', '上海', '1085', '2018-10-23 12:00:02');
-INSERT INTO `job_count` VALUES ('210', 'golang', '上海', '1147', '2018-10-23 12:00:02');
-INSERT INTO `job_count` VALUES ('211', 'golang', '上海', '1155', '2018-10-24 12:00:01');
-INSERT INTO `job_count` VALUES ('212', 'nodejs', '上海', '1100', '2018-10-24 12:00:01');
-INSERT INTO `job_count` VALUES ('213', 'nodejs', '上海', '1104', '2018-10-25 12:00:02');
-INSERT INTO `job_count` VALUES ('214', 'golang', '上海', '1163', '2018-10-25 12:00:02');
-INSERT INTO `job_count` VALUES ('215', 'nodejs', '上海', '1099', '2018-10-26 12:00:01');
-INSERT INTO `job_count` VALUES ('216', 'golang', '上海', '1167', '2018-10-26 12:00:01');
-INSERT INTO `job_count` VALUES ('217', 'golang', '上海', '1159', '2018-10-27 12:00:01');
-INSERT INTO `job_count` VALUES ('218', 'nodejs', '上海', '1088', '2018-10-27 12:00:02');
-INSERT INTO `job_count` VALUES ('219', 'golang', '上海', '1148', '2018-10-28 12:00:01');
-INSERT INTO `job_count` VALUES ('220', 'nodejs', '上海', '1072', '2018-10-28 12:00:01');
-INSERT INTO `job_count` VALUES ('221', 'golang', '上海', '1132', '2018-10-29 12:00:01');
-INSERT INTO `job_count` VALUES ('222', 'nodejs', '上海', '1063', '2018-10-29 12:00:01');
-INSERT INTO `job_count` VALUES ('223', 'golang', '上海', '1133', '2018-10-30 12:00:01');
-INSERT INTO `job_count` VALUES ('224', 'nodejs', '上海', '1062', '2018-10-30 12:00:01');
-INSERT INTO `job_count` VALUES ('225', 'golang', '上海', '1146', '2018-10-31 12:00:01');
-INSERT INTO `job_count` VALUES ('226', 'nodejs', '上海', '1055', '2018-10-31 12:00:01');
-INSERT INTO `job_count` VALUES ('227', 'golang', '上海', '1158', '2018-11-01 12:00:01');
-INSERT INTO `job_count` VALUES ('228', 'nodejs', '上海', '1066', '2018-11-01 12:00:01');
-INSERT INTO `job_count` VALUES ('229', 'golang', '上海', '1162', '2018-11-02 12:00:00');
-INSERT INTO `job_count` VALUES ('230', 'nodejs', '上海', '1066', '2018-11-02 12:00:01');
-INSERT INTO `job_count` VALUES ('231', 'nodejs', '上海', '1071', '2018-11-03 12:00:00');
-INSERT INTO `job_count` VALUES ('232', 'golang', '上海', '1166', '2018-11-03 12:00:02');
-INSERT INTO `job_count` VALUES ('233', 'golang', '上海', '1168', '2018-11-04 12:00:00');
-INSERT INTO `job_count` VALUES ('234', 'nodejs', '上海', '1072', '2018-11-04 12:00:01');
-INSERT INTO `job_count` VALUES ('235', 'nodejs', '上海', '1075', '2018-11-05 12:00:00');
-INSERT INTO `job_count` VALUES ('236', 'golang', '上海', '1167', '2018-11-05 12:00:01');
-INSERT INTO `job_count` VALUES ('237', 'nodejs', '上海', '1066', '2018-11-06 12:00:01');
-INSERT INTO `job_count` VALUES ('238', 'golang', '上海', '1151', '2018-11-06 12:00:01');
-INSERT INTO `job_count` VALUES ('239', 'nodejs', '上海', '1061', '2018-11-07 12:00:01');
-INSERT INTO `job_count` VALUES ('240', 'golang', '上海', '1154', '2018-11-07 12:00:01');
-INSERT INTO `job_count` VALUES ('241', 'golang', '上海', '1120', '2018-11-13 12:00:01');
-INSERT INTO `job_count` VALUES ('242', 'nodejs', '上海', '1051', '2018-11-13 12:00:01');
-INSERT INTO `job_count` VALUES ('243', 'golang', '上海', '1140', '2018-11-14 12:00:00');
-INSERT INTO `job_count` VALUES ('244', 'nodejs', '上海', '1069', '2018-11-14 12:00:01');
-INSERT INTO `job_count` VALUES ('245', 'golang', '上海', '1139', '2018-11-15 12:00:01');
-INSERT INTO `job_count` VALUES ('246', 'nodejs', '上海', '1054', '2018-11-15 12:00:01');
-INSERT INTO `job_count` VALUES ('247', 'nodejs', '上海', '1049', '2018-11-16 12:00:01');
-INSERT INTO `job_count` VALUES ('248', 'golang', '上海', '1135', '2018-11-16 12:00:01');
-INSERT INTO `job_count` VALUES ('249', 'golang', '上海', '1144', '2018-11-17 12:00:01');
-INSERT INTO `job_count` VALUES ('250', 'nodejs', '上海', '1045', '2018-11-17 12:00:01');
-INSERT INTO `job_count` VALUES ('251', 'golang', '上海', '1130', '2018-11-18 12:00:01');
-INSERT INTO `job_count` VALUES ('252', 'nodejs', '上海', '1040', '2018-11-18 12:00:01');
-INSERT INTO `job_count` VALUES ('253', 'nodejs', '上海', '1036', '2018-11-19 12:00:01');
-INSERT INTO `job_count` VALUES ('254', 'golang', '上海', '1134', '2018-11-19 12:00:01');
-INSERT INTO `job_count` VALUES ('255', 'golang', '上海', '1144', '2018-11-20 12:00:01');
-INSERT INTO `job_count` VALUES ('256', 'nodejs', '上海', '1044', '2018-11-20 12:00:01');
-INSERT INTO `job_count` VALUES ('257', 'golang', '上海', '1150', '2018-11-21 12:00:01');
-INSERT INTO `job_count` VALUES ('258', 'nodejs', '上海', '1049', '2018-11-21 12:00:01');
-INSERT INTO `job_count` VALUES ('259', 'golang', '上海', '1143', '2018-11-22 12:00:01');
-INSERT INTO `job_count` VALUES ('260', 'nodejs', '上海', '1044', '2018-11-22 12:00:01');
-INSERT INTO `job_count` VALUES ('261', 'nodejs', '上海', '1043', '2018-11-23 12:00:00');
-INSERT INTO `job_count` VALUES ('262', 'golang', '上海', '1150', '2018-11-23 12:00:01');
-INSERT INTO `job_count` VALUES ('263', 'golang', '上海', '1148', '2018-11-24 12:00:01');
-INSERT INTO `job_count` VALUES ('264', 'nodejs', '上海', '1046', '2018-11-24 12:00:01');
-INSERT INTO `job_count` VALUES ('265', 'golang', '上海', '1142', '2018-11-25 12:00:01');
-INSERT INTO `job_count` VALUES ('266', 'nodejs', '上海', '1042', '2018-11-25 12:00:01');
-INSERT INTO `job_count` VALUES ('267', 'nodejs', '上海', '1041', '2018-11-26 12:00:01');
-INSERT INTO `job_count` VALUES ('268', 'golang', '上海', '1133', '2018-11-26 12:00:01');
-INSERT INTO `job_count` VALUES ('269', 'nodejs', '上海', '1049', '2018-11-27 12:00:00');
-INSERT INTO `job_count` VALUES ('270', 'golang', '上海', '1130', '2018-11-27 12:00:01');
-INSERT INTO `job_count` VALUES ('271', 'nodejs', '上海', '1062', '2018-11-28 12:00:00');
-INSERT INTO `job_count` VALUES ('272', 'golang', '上海', '1143', '2018-11-28 12:00:01');
-INSERT INTO `job_count` VALUES ('273', 'golang', '上海', '1134', '2018-11-29 12:00:01');
-INSERT INTO `job_count` VALUES ('274', 'nodejs', '上海', '1048', '2018-11-29 12:00:01');
-INSERT INTO `job_count` VALUES ('276', 'nodejs', '上海', '1052', '2018-11-30 12:00:01');
-INSERT INTO `job_count` VALUES ('278', 'golang', '上海', '1071', '2018-12-01 12:00:00');
-INSERT INTO `job_count` VALUES ('279', 'golang', '上海', '1074', '2018-12-02 12:00:01');
-INSERT INTO `job_count` VALUES ('280', 'nodejs', '上海', '1044', '2018-12-02 12:00:01');
-INSERT INTO `job_count` VALUES ('281', 'nodejs', '上海', '1030', '2018-12-03 12:00:00');
-INSERT INTO `job_count` VALUES ('282', 'golang', '上海', '1082', '2018-12-03 12:00:00');
-INSERT INTO `job_count` VALUES ('285', 'nodejs', '上海', '1042', '2018-12-05 12:00:01');
-INSERT INTO `job_count` VALUES ('286', 'golang', '上海', '1091', '2018-12-05 12:00:01');
-INSERT INTO `job_count` VALUES ('287', 'golang', '上海', '1098', '2018-12-06 12:00:01');
-INSERT INTO `job_count` VALUES ('288', 'nodejs', '上海', '1047', '2018-12-06 12:00:01');
-INSERT INTO `job_count` VALUES ('289', 'golang', '上海', '1101', '2018-12-07 12:00:01');
-INSERT INTO `job_count` VALUES ('290', 'nodejs', '上海', '1046', '2018-12-07 12:00:01');
-INSERT INTO `job_count` VALUES ('291', 'nodejs', '上海', '1046', '2018-12-08 12:00:01');
-INSERT INTO `job_count` VALUES ('292', 'golang', '上海', '1093', '2018-12-08 12:00:01');
-INSERT INTO `job_count` VALUES ('293', 'nodejs', '上海', '1042', '2018-12-09 12:00:01');
-INSERT INTO `job_count` VALUES ('294', 'golang', '上海', '1086', '2018-12-09 12:00:01');
-INSERT INTO `job_count` VALUES ('295', 'golang', '上海', '1084', '2018-12-10 12:00:00');
-INSERT INTO `job_count` VALUES ('296', 'nodejs', '上海', '1040', '2018-12-10 12:00:01');
-INSERT INTO `job_count` VALUES ('297', 'nodejs', '上海', '1050', '2018-12-11 12:00:01');
-INSERT INTO `job_count` VALUES ('298', 'golang', '上海', '1093', '2018-12-11 12:00:01');
-INSERT INTO `job_count` VALUES ('299', 'golang', '上海', '1096', '2018-12-12 12:00:01');
-INSERT INTO `job_count` VALUES ('300', 'nodejs', '上海', '1056', '2018-12-12 12:00:01');
-INSERT INTO `job_count` VALUES ('301', 'golang', '上海', '1086', '2018-12-13 12:00:01');
-INSERT INTO `job_count` VALUES ('302', 'nodejs', '上海', '1051', '2018-12-13 12:00:01');
-INSERT INTO `job_count` VALUES ('304', 'nodejs', '上海', '1048', '2018-12-14 12:00:00');
-INSERT INTO `job_count` VALUES ('305', 'nodejs', '上海', '1042', '2018-12-15 12:00:01');
-INSERT INTO `job_count` VALUES ('306', 'golang', '上海', '1086', '2018-12-15 12:00:01');
-INSERT INTO `job_count` VALUES ('307', 'golang', '上海', '1084', '2018-12-16 12:00:01');
-INSERT INTO `job_count` VALUES ('308', 'nodejs', '上海', '1035', '2018-12-16 12:00:01');
-INSERT INTO `job_count` VALUES ('309', 'nodejs', '上海', '1031', '2018-12-17 12:00:01');
-INSERT INTO `job_count` VALUES ('310', 'golang', '上海', '1078', '2018-12-17 12:00:01');
-INSERT INTO `job_count` VALUES ('311', 'nodejs', '上海', '1029', '2018-12-18 12:00:01');
-INSERT INTO `job_count` VALUES ('312', 'golang', '上海', '1097', '2018-12-18 12:00:01');
-INSERT INTO `job_count` VALUES ('313', 'golang', '上海', '1096', '2018-12-19 12:00:01');
-INSERT INTO `job_count` VALUES ('314', 'nodejs', '上海', '1033', '2018-12-19 12:00:01');
-INSERT INTO `job_count` VALUES ('315', 'nodejs', '上海', '1033', '2018-12-20 12:00:00');
-INSERT INTO `job_count` VALUES ('316', 'golang', '上海', '1096', '2018-12-20 12:00:01');
-INSERT INTO `job_count` VALUES ('321', 'nodejs', '上海', '1026', '2018-12-25 15:24:01');
-INSERT INTO `job_count` VALUES ('322', 'golang', '上海', '1097', '2018-12-25 15:24:01');
 
 -- ----------------------------
 -- Table structure for `log`
@@ -513,65 +250,6 @@ INSERT INTO `log` VALUES ('1', '登录IP:43.227.254.20，物理地址：中国  
 INSERT INTO `log` VALUES ('2', '登录IP:101.81.62.69，物理地址：中国  上海 上海', '2018-09-25 14:10:11', '2018-09-25 14:10:11');
 INSERT INTO `log` VALUES ('3', '登录IP:116.226.177.39，物理地址：中国  上海 上海', '2018-09-28 09:38:48', '2018-09-28 09:38:48');
 INSERT INTO `log` VALUES ('4', '登录IP:222.209.182.112，物理地址：中国  四川 成都', '2018-09-29 17:44:54', '2018-09-29 17:44:54');
-INSERT INTO `log` VALUES ('5', '登录IP:222.209.182.112，物理地址：中国  四川 成都', '2018-09-29 17:44:56', '2018-09-29 17:44:56');
-INSERT INTO `log` VALUES ('6', '登录IP:101.81.61.204，物理地址：中国  上海 上海', '2018-10-08 13:26:26', '2018-10-08 13:26:26');
-INSERT INTO `log` VALUES ('7', '登录IP:59.34.155.237，物理地址：中国  广东 茂名', '2018-10-11 19:42:01', '2018-10-11 19:42:01');
-INSERT INTO `log` VALUES ('8', '登录IP:101.81.61.204，物理地址：中国  上海 上海', '2018-10-12 10:23:16', '2018-10-12 10:23:16');
-INSERT INTO `log` VALUES ('9', '登录IP:104.245.14.72，物理地址：美国  加利福尼亚 洛杉矶', '2018-10-12 10:23:55', '2018-10-12 10:23:55');
-INSERT INTO `log` VALUES ('10', '登录IP:193.110.202.121，物理地址：香港  香港 XX', '2018-10-18 13:24:13', '2018-10-18 13:24:13');
-INSERT INTO `log` VALUES ('11', '登录IP:123.113.146.255，物理地址：中国  北京 北京', '2018-10-19 14:27:12', '2018-10-19 14:27:12');
-INSERT INTO `log` VALUES ('12', '登录IP:61.141.64.4，物理地址：中国  广东 深圳', '2018-10-24 11:41:14', '2018-10-24 11:41:14');
-INSERT INTO `log` VALUES ('13', '登录IP:112.65.30.15，物理地址：中国  上海 上海', '2018-10-24 20:56:05', '2018-10-24 20:56:05');
-INSERT INTO `log` VALUES ('14', '登录IP:112.65.30.15，物理地址：中国  上海 上海', '2018-10-24 20:56:05', '2018-10-24 20:56:05');
-INSERT INTO `log` VALUES ('15', '登录IP:112.65.30.15，物理地址：中国  上海 上海', '2018-10-24 20:56:41', '2018-10-24 20:56:41');
-INSERT INTO `log` VALUES ('16', '登录IP:101.81.62.65，物理地址：中国  上海 上海', '2018-10-28 10:49:01', '2018-10-28 10:49:01');
-INSERT INTO `log` VALUES ('17', '登录IP:183.221.39.12，物理地址：中国  四川 成都', '2018-10-29 17:20:34', '2018-10-29 17:20:34');
-INSERT INTO `log` VALUES ('18', '登录IP:47.75.193.192，物理地址：香港  香港 XX', '2018-11-01 01:30:47', '2018-11-01 01:30:47');
-INSERT INTO `log` VALUES ('19', '登录IP:116.231.91.253，物理地址：中国  上海 上海', '2018-11-02 10:24:27', '2018-11-02 10:24:27');
-INSERT INTO `log` VALUES ('20', '登录IP:113.251.25.118，物理地址：中国  重庆 重庆', '2018-11-08 03:39:04', '2018-11-08 03:39:04');
-INSERT INTO `log` VALUES ('21', '登录IP:139.224.131.252，物理地址：中国  上海 上海', '2018-11-13 10:07:54', '2018-11-13 10:07:54');
-INSERT INTO `log` VALUES ('22', '登录IP:59.109.146.112，物理地址：中国  北京 北京', '2018-11-13 22:34:51', '2018-11-13 22:34:51');
-INSERT INTO `log` VALUES ('23', '登录IP:183.3.220.32，物理地址：中国  广东 深圳', '2018-11-14 20:10:13', '2018-11-14 20:10:13');
-INSERT INTO `log` VALUES ('24', '登录IP:58.33.180.124，物理地址：中国  上海 上海', '2018-11-15 16:43:22', '2018-11-15 16:43:22');
-INSERT INTO `log` VALUES ('25', '登录IP:139.224.131.252，物理地址：中国  上海 上海', '2018-11-16 10:10:48', '2018-11-16 10:10:48');
-INSERT INTO `log` VALUES ('26', '登录IP:218.241.193.75，物理地址：中国  北京 北京', '2018-11-16 14:46:37', '2018-11-16 14:46:37');
-INSERT INTO `log` VALUES ('27', '登录IP:116.231.91.253，物理地址：中国  上海 上海', '2018-11-23 19:10:54', '2018-11-23 19:10:54');
-INSERT INTO `log` VALUES ('28', '登录IP:117.25.245.148，物理地址：中国  福建 厦门', '2018-11-24 11:08:59', '2018-11-24 11:08:59');
-INSERT INTO `log` VALUES ('29', '登录IP:116.231.91.253，物理地址：中国  上海 上海', '2018-11-26 14:49:01', '2018-11-26 14:49:01');
-INSERT INTO `log` VALUES ('30', '登录IP:223.104.213.77，物理地址：中国  上海 上海', '2018-11-29 18:11:07', '2018-11-29 18:11:07');
-INSERT INTO `log` VALUES ('31', '登录IP:124.93.248.69，物理地址：中国  辽宁 大连', '2018-12-02 20:38:14', '2018-12-02 20:38:14');
-INSERT INTO `log` VALUES ('32', '登录IP:139.224.131.252，物理地址：中国  上海 上海', '2018-12-03 15:54:40', '2018-12-03 15:54:40');
-INSERT INTO `log` VALUES ('33', '登录IP:103.14.252.249，物理地址：澳大利亚  XX XX', '2018-12-04 17:18:50', '2018-12-04 17:18:50');
-INSERT INTO `log` VALUES ('34', '登录IP:220.133.64.76，物理地址：台湾  台湾 XX', '2018-12-05 13:46:43', '2018-12-05 13:46:43');
-INSERT INTO `log` VALUES ('35', '登录IP:116.243.9.82，物理地址：中国  北京 北京', '2018-12-05 14:47:34', '2018-12-05 14:47:34');
-INSERT INTO `log` VALUES ('36', '登录IP:59.53.183.217，物理地址：中国  江西 南昌', '2018-12-05 17:43:06', '2018-12-05 17:43:06');
-INSERT INTO `log` VALUES ('37', '登录IP:139.224.131.252，物理地址：中国  上海 上海', '2018-12-07 13:35:40', '2018-12-07 13:35:40');
-INSERT INTO `log` VALUES ('38', '登录IP:211.161.240.192，物理地址：中国  上海 上海', '2018-12-09 22:44:43', '2018-12-09 22:44:43');
-INSERT INTO `log` VALUES ('39', '登录IP:211.161.240.192，物理地址：中国  上海 上海', '2018-12-09 22:44:47', '2018-12-09 22:44:47');
-INSERT INTO `log` VALUES ('40', '登录IP:139.224.131.252，物理地址：中国  上海 上海', '2018-12-10 18:32:44', '2018-12-10 18:32:44');
-INSERT INTO `log` VALUES ('41', '登录IP:153.37.51.83，物理地址：中国  江苏 盐城', '2018-12-11 09:25:35', '2018-12-11 09:25:35');
-INSERT INTO `log` VALUES ('42', '登录IP:116.226.79.78，物理地址：中国  上海 上海', '2018-12-17 15:27:14', '2018-12-17 15:27:14');
-INSERT INTO `log` VALUES ('43', '登录IP:114.219.135.10，物理地址：中国  江苏 苏州', '2018-12-18 14:38:26', '2018-12-18 14:38:26');
-INSERT INTO `log` VALUES ('44', '登录IP:116.226.79.78，物理地址：中国  上海 上海', '2018-12-21 10:07:59', '2018-12-21 10:07:59');
-INSERT INTO `log` VALUES ('45', '登录IP:121.69.28.58，物理地址：中国  北京 北京', '2018-12-21 11:31:20', '2018-12-21 11:31:20');
-INSERT INTO `log` VALUES ('46', '登录IP:116.231.91.253，物理地址：中国  上海 上海', '2018-12-25 15:32:06', '2018-12-25 15:32:06');
-
--- ----------------------------
--- Table structure for `people_feature_relation`
--- ----------------------------
-DROP TABLE IF EXISTS `people_feature_relation`;
-CREATE TABLE `people_feature_relation` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `assis_people_id` int(11) DEFAULT NULL,
-  `feature_id` int(11) DEFAULT NULL,
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
--- ----------------------------
--- Records of people_feature_relation
--- ----------------------------
 
 -- ----------------------------
 -- Table structure for `role`
@@ -579,12 +257,12 @@ CREATE TABLE `people_feature_relation` (
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `authority` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
-  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '说明',
+  `authority` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '说明',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='可以给一个角色很多权限，也可以通过很多角色组合来拥有很多权限';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='可以给一个角色很多权限，也可以通过很多角色组合来拥有很多权限';
 
 -- ----------------------------
 -- Records of role
@@ -623,27 +301,28 @@ INSERT INTO `user` VALUES ('1', 'admin', '犬夜叉', '21232f297a57a5a743894a0e4
 INSERT INTO `user` VALUES ('2', 'user1', '月盾', '21232f297a57a5a743894a0e4a801fc3', '1', '18701897513@139.com', '上海', '1', 'golang开发者', '2018-03-17 20:49:44', '2018-06-11 12:56:34');
 INSERT INTO `user` VALUES ('5', 'user2', '施工图人力', '21232f297a57a5a743894a0e4a801fc3', '1', '18611118146@139.com', '看见的任何司空见惯和', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
 INSERT INTO `user` VALUES ('8', '10701897527', '缇欧', '21232f297a57a5a743894a0e4a801fc3', '0', 'huo@gmail.com', '吉林大街好地方', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
-INSERT INTO `user` VALUES ('9', '10706597527', '瑞泰居', '21232f297a57a5a743894a0e4a801fc3', '0', '438473@qq.com', '连接哦哦发给你基地', '1', '收到了架构过人家饿啊人工', '2017-07-29 10:38:06', '2018-04-06 17:02:03');
-INSERT INTO `user` VALUES ('13', '18701497527', '杀生丸', '8fa2952fff72d92c98f9f43e46dfc6bd', '1', 'hp@sina.com', '送就送山东黄金人数', '1', '视频国际投行饿哦日后我如何进入', '2018-02-05 04:20:37', '2018-12-02 20:38:37');
-INSERT INTO `user` VALUES ('14', '12345678909', '珊瑚', '5335412ee0f17806e1017e607149336a', '0', 'ligh@163.com', '很快就都大佛开盘后具体要', '1', '我感觉哦过仁和堂撒今天', '2018-02-05 08:07:37', '2018-04-06 17:03:04');
-INSERT INTO `user` VALUES ('21', '18721897527', '让大哥', '8fa2952fff72d92c98f9f43e46dfc6bd', '1', '18611118146@139.com', '送就送山东黄金人数几乎是丢改好', '1', '就fdfda', '2018-02-11 07:53:18', '2018-10-24 11:43:07');
-INSERT INTO `user` VALUES ('22', '18766464985', '接收到过', '442ba06a1ac9ad299865c11234b9c492', '0', 'ligh@163.com', '送就送山东黄金人数几乎是丢改好看机会', '1', '', '2018-02-11 15:58:10', '2018-02-11 16:00:32');
-INSERT INTO `user` VALUES ('23', '12335678909', 'UI一天', '5335412ee0f17806e1017e607149336a', '1', '13344442929@163.com', '看见的任何', '1', '', '2018-02-11 16:05:53', '2018-02-27 13:03:52');
-INSERT INTO `user` VALUES ('25', '18111897528', '突然间和', '033554527363fed57bacfcab7c77c5fb', '0', 'lig@163.com', 'dfpkgipniu', '1', '当人看了韩国人都', '2018-02-28 10:34:39', '2018-02-28 10:34:39');
-INSERT INTO `user` VALUES ('26', '18765464985', '偶遇', '442ba06a1ac9ad299865c11234b9c492', '0', '13344442929@163.com', '很快就都大佛开盘后具体要', '1', '客人很多事让她二炮还叫人', '2018-02-28 10:34:58', '2018-02-28 10:34:58');
-INSERT INTO `user` VALUES ('27', '18701817525', '鹅肉你以后', '67c70763ce38919105acc783fa5e834d', '1', '18765464985', '了PDF你好逗', '1', '哦【但是若干年后天赋', '2018-02-28 10:35:20', '2018-02-28 10:35:20');
-INSERT INTO `user` VALUES ('28', '15800739208', 'gurdian90', 'dfda39bb37573e74338338642162d85b', '0', '8974@qq.com', '长安路1138号', '0', '好回家哦个积极破解', '2018-04-05 23:19:33', '2018-04-05 23:19:33');
-
 -- ----------------------------
--- Table structure for `picture`
+-- Table structure for `authority`
 -- ----------------------------
-DROP TABLE IF EXISTS `picture`;
-CREATE TABLE `picture` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `pic_url` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `tag` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
+DROP TABLE IF EXISTS `authority`;
+CREATE TABLE `authority` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `role_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `idx_user_authority` (`user_id`,`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+-- ----------------------------
+-- Records of authority
+-- ----------------------------
+INSERT INTO `authority` VALUES ('6', '1', '3', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
+INSERT INTO `authority` VALUES ('7', '1', '1', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
+INSERT INTO `authority` VALUES ('8', '1', '2', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
+INSERT INTO `authority` VALUES ('9', '1', '4', '2018-06-11 13:10:25', '2018-06-11 13:10:28');
+INSERT INTO `authority` VALUES ('10', '1', '5', '2018-06-11 13:10:38', '2018-06-11 13:10:40');
+INSERT INTO `authority` VALUES ('11', '1', '6', '2018-06-11 13:10:50', '2018-06-11 13:10:55');
+INSERT INTO `authority` VALUES ('12', '2', '3', '2018-11-01 01:31:22', '2018-11-01 01:31:22');
 
