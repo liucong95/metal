@@ -16,18 +16,17 @@ var SexMap = map[int]string{0: "女", 1: "男"}
  */
 type User struct {
 	BaseModel
-	UserName    string `json:"user_name"`
+	Account		string `jsong:"account"`
 	Password    string `json:"password"`
-	Gender      int    `json:"gender"` // 0女，1男
+	UserName    string `json:"user_name"`
 	Mobile      string `json:"mobile"`
 	Email       string `json:"email"`
-	Addr        string `json:"addr"`
 	Description string `json:"description"`
 	Status      int    `json:"status"` // 0不可用，1可用
 }
-type UserVO struct {
+
+type UserSt struct {
 	User
-	Gender    string `json:"gender"`
 	CreatedAt string `json:"created_at"`
 	UpdatedAt string `json:"updated_at"`
 }
@@ -39,7 +38,7 @@ func init() {
 	// 反之，如果只使用 Raw 查询和 map struct，是无需这一步的。
 }
 
-// 添加用户
+//Save 添加用户
 func (user *User) Save() (int64, error) {
 	//	var o Ormer
 	o := orm.NewOrm()
@@ -48,14 +47,14 @@ func (user *User) Save() (int64, error) {
 	return o.Insert(user)
 }
 
-// 通过id查找用户
+//GetById 通过id查找用户
 func (user *User) GetById() (*User, error) {
 	o := orm.NewOrm()
 	err := o.Read(user, "id")
 	return user, err
 }
 
-// 通过用户名查找用户
+//GetByName 通过用户名查找用户
 func (user *User) GetByName() error {
 	o := orm.NewOrm()
 	err := o.Read(user, "username")
@@ -65,17 +64,17 @@ func (user *User) GetByName() error {
 	return nil
 }
 
-// 通过手机号查找用户
-func (user *User) GetByMobile() error {
+//GetByAccount 通过手机号查找用户
+func (user *User) GetByAccount() error {
 	o := orm.NewOrm()
-	err := o.Read(user, "mobile")
+	err := o.Read(user, "account")
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// 获取用户列表
+//GetAll 获取用户列表
 func (user *User) GetAll() ([]User, error) {
 	o := orm.NewOrm()
 	var users []User
@@ -85,12 +84,12 @@ func (user *User) GetAll() ([]User, error) {
 
 }
 
-// 获取用户列表
+//GetAllByCondition 获取用户列表
 func (user *User) GetAllByCondition(cond map[string]string, start, perPage int) (users []User, total int64, newError error) {
 	o := orm.NewOrm()
 	var condition = " WHERE 1 "
-	if cond["mobile"] != "" {
-		condition += "and (mobile like '" + cond["username"] + "%' or user_name like '" + cond["username"] + "%' )"
+	if cond["account"] != "" {
+		condition += "and (account like '" + cond["account"] + "%' or user_name like '" + cond["username"] + "%' )"
 	}
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -118,20 +117,20 @@ func (user *User) GetAllByCondition(cond map[string]string, start, perPage int) 
 	return users, total, newError
 }
 
-// 通过id修改用户
+//Update 通过id修改用户
 func (user *User) Update() (int64, error) {
 	o := orm.NewOrm()
-	id, err := o.Update(user, "username", "gender", "email", "mobile", "addr", "description", "updated_at") // 要修改的对象和需要修改的字段
+	id, err := o.Update(user, "account", "username", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
 	return id, err
 }
 
-// 通过id删除用户
+//Delete 通过id删除用户
 func (user *User) Delete() (int64, error) {
 	o := orm.NewOrm()
 	id, err := o.Update(user, "status") // 要修改的对象和需要修改的字段
 	if err != nil {
 		return id, err
-	} else {
-		return id, nil
 	}
+
+	return id, nil
 }

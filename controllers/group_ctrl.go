@@ -15,7 +15,6 @@ type GroupController struct {
 }
 
 // AddUserRole 用户添加权限
-// @router /user/groups [post]
 func (c *GroupController) AddUserRole() {
 	defer func() {
 		if err := recover(); err != nil {
@@ -32,18 +31,18 @@ func (c *GroupController) AddUserRole() {
 		panic(err)
 	}
 	logs.Info("参数：", args)
-	userId := args.UserId
-	if userId == 0 {
+	UserID := args.UserId
+	if UserID == 0 {
 		panic(errors.New("userId不能为空"))
 	}
 	roleIds := args.Roles
 	if len(roleIds) == 0 {
 		panic(errors.New("roleId不能为空"))
 	}
-	for _, roleId := range roleIds {
-		var userGroup = new(Groups)
-		userGroup.UserId = userId
-		userGroup.RoleId = roleId
+	for _, roleID := range roleIds {
+		var userGroup = new(Authority)
+		userGroup.UserId = UserID
+		userGroup.RoleId = roleID
 		userGroup.CreatedAt = time.Now()
 		userGroup.UpdatedAt = time.Now()
 		_, err := userGroup.Save()
@@ -56,10 +55,12 @@ func (c *GroupController) AddUserRole() {
 }
 
 // GetUserRoles 获取用户权限
-// @router /user-roles/:userId [get]
 func (c *GroupController) GetUserRoles() {
-	userId := c.Ctx.Input.Param(":userId")
-	uid, _ := strconv.Atoi(userId)
+	uid, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	if err != nil{
+		logs.Error("get uid,err:%s",err)
+	}
+
 	role := new(Role)
 	allRoles, userRoles, err := role.GetRolesAndUserPermission(uid)
 	logs.Debug("allRoles:", allRoles)

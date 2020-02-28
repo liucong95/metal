@@ -8,16 +8,18 @@ import (
 	"github.com/astaxie/beego/context"
 )
 
+//AdminBaseController ...
 type AdminBaseController struct {
 	BaseController
 }
 
+//UserPermission ...
 type UserPermission struct {
 	User       models.User
 	Privileges []string //特权
 }
 
-// 后台权限验证
+//HasAdminPermission 后台权限验证
 var HasAdminPermission = func(ctx *context.Context) {
 	loginUser := ctx.Input.CruSession.Get("loginUser")
 	if loginUser == nil && ctx.Input.URL() != "/admin/login" && ctx.Input.URL() != "/admin/to-login" {
@@ -25,9 +27,7 @@ var HasAdminPermission = func(ctx *context.Context) {
 	}
 }
 
-/**
- * 这个函数主要是为了用户扩展用的，这个函数会在下面定义的这些 Method 方法之前执行，用户可以重写这个函数实现类似用户验证之类
- */
+//Prepare 这个函数主要是为了用户扩展用的，这个函数会在下面定义的这些 Method 方法之前执行，用户可以重写这个函数实现类似用户验证之类
 func (c *AdminBaseController) Prepare() {
 	// admin-user-ctrl和user-index-ctrl都继承了base-ctrl，所以都会自动执行该方法
 	// 因为前端用户界面不需要权限验证，管理后台才需要
@@ -43,6 +43,7 @@ func (c *AdminBaseController) Prepare() {
 		hasPermission := true
 		//需要权限
 		if permissions.NeedPermission[requestPermission] {
+			return
 			hasPermission = false
 			for _, pri := range privileges {
 				if pri != requestPermission {

@@ -28,6 +28,9 @@ func init() {
 		beego.NSRouter("/users", &controllers.AdminController{}, "get:UserList"),
 		beego.NSRouter("/user-group", &controllers.UserGroupController{}),
 
+		beego.NSRouter("/user/groups", &controllers.GroupController{}, "post:AddUserRole"),
+		beego.NSRouter("/user-roles/:id", &controllers.GroupController{}, "get:GetUserRoles"),
+
 		beego.NSRouter("/article-route", &controllers.ArticleController{}, "get:CreateArticleRoute"),
 		beego.NSRouter("/article-create", &controllers.ArticleController{}, "post:CreateArticle"),
 		beego.NSRouter("/articles-route", &controllers.ArticleController{}, "get:ArticlesRoute"),

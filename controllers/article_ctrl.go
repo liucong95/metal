@@ -74,7 +74,7 @@ func (c *ArticleController) ArticlesList() {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	} else {
-		data := map[string]any{
+		data := map[string]interface{}{
 			"result": list,
 			"total":  total,
 		}

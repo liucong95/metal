@@ -53,7 +53,7 @@ CREATE TABLE `assistance` (
   `images` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   `first_helper` int(11) DEFAULT '0',
   `second_helper` int(11) DEFAULT '0',
-  `user_mobile` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `user_account` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -280,27 +280,26 @@ INSERT INTO `role` VALUES ('6', 'AdminController:UserList', '用户列表', '201
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `mobile` varchar(255) NOT NULL DEFAULT '',
-  `user_name` varchar(255) NOT NULL DEFAULT '',
+  `account` varchar(255) NOT NULL DEFAULT '',
   `password` varchar(255) NOT NULL DEFAULT '',
-  `gender` varchar(255) NOT NULL DEFAULT '',
+  `user_name` varchar(255) NOT NULL DEFAULT '',
+  `mobile` varchar(255) NOT NULL DEFAULT '',
   `email` varchar(255) NOT NULL DEFAULT '',
-  `addr` varchar(255) NOT NULL DEFAULT '',
   `status` int(11) NOT NULL DEFAULT '1',
   `description` varchar(255) NOT NULL DEFAULT '',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_mobile_uniq` (`mobile`) USING BTREE
+  UNIQUE KEY `idx_account_uniq` (`account`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'admin', '犬夜叉', '21232f297a57a5a743894a0e4a801fc3', '1', '13477889900@139.com', '日暮神社', '1', '半妖', '2018-03-17 20:46:31', '2018-11-01 01:31:17');
-INSERT INTO `user` VALUES ('2', 'user1', '月盾', '21232f297a57a5a743894a0e4a801fc3', '1', '18701897513@139.com', '上海', '1', 'golang开发者', '2018-03-17 20:49:44', '2018-06-11 12:56:34');
-INSERT INTO `user` VALUES ('5', 'user2', '施工图人力', '21232f297a57a5a743894a0e4a801fc3', '1', '18611118146@139.com', '看见的任何司空见惯和', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
-INSERT INTO `user` VALUES ('8', '10701897527', '缇欧', '21232f297a57a5a743894a0e4a801fc3', '0', 'huo@gmail.com', '吉林大街好地方', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
+INSERT INTO `user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '犬夜叉', '110', '13477889900@139.com', '1', '半妖', '2018-03-17 20:46:31', '2018-11-01 01:31:17');
+INSERT INTO `user` VALUES ('2', 'user1', '21232f297a57a5a743894a0e4a801fc3', '月盾', '110', '18701897513@139.com', '1', 'golang开发者', '2018-03-17 20:49:44', '2018-06-11 12:56:34');
+INSERT INTO `user` VALUES ('3', 'user2', '21232f297a57a5a743894a0e4a801fc3', '施工图人力', '110', '18611118146@139.com', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
+INSERT INTO `user` VALUES ('4', '10701897527', '21232f297a57a5a743894a0e4a801fc3', '缇欧', '110', 'huo@gmail.com', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
 -- ----------------------------
 -- Table structure for `authority`
 -- ----------------------------

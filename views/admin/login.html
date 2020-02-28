@@ -15,7 +15,7 @@
 
         <form action="" method="post" onsubmit="return false">
             <div class="form-group has-feedback">
-                <input type="text" class="form-control" name="mobile" value="admin" placeholder="Mobile">
+                <input type="text" class="form-control" name="account" value="admin" placeholder="">
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
             <div class="form-group has-feedback">
@@ -60,7 +60,7 @@
                 type: 'post', //GET
                 async: true,    //或false,是否异步
                 data: {
-                    mobile: $("input[name=mobile]").val(),
+                    account: $("input[name=account]").val(),
                     password: $("input[name=password]").val()
                 },
                 timeout: 5000,    //超时时间
@@ -85,7 +85,7 @@
         });
 
         $("#forget-password").click(function(){
-            alert("默认密码：hello+手机后4位");
+            alert("联系管理员重置密码");
         })
     });
 </script>

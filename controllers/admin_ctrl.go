@@ -11,20 +11,23 @@ import (
 	"time"
 )
 
+//AdminController ...
 type AdminController struct {
 	AdminBaseController
 }
 
+//Login 。。。
 func (c *AdminController) Login() {
 	c.TplName = "admin/login.html"
 }
 
+//ToLogin 登录
 func (c *AdminController) ToLogin() {
-	var mobile = c.GetString("mobile")
+	var account = c.GetString("account")
 	var password = c.GetString("password")
 
-	user := &User{Mobile: mobile}
-	err := user.GetByMobile()
+	user := &User{Account: account}
+	err := user.GetByAccount()
 	if err != nil {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
@@ -33,7 +36,7 @@ func (c *AdminController) ToLogin() {
 	} else if user.Password != util.GetMD5(password) {
 		c.Data["json"] = ErrorMsg("密码不正确！")
 	} else {
-		group := new(Groups)
+		group := new(Authority)
 		roleList, err := group.GetGroupByUserId(user.Id)
 		if err != nil {
 			c.Data["json"] = ErrorData(err)
@@ -89,35 +92,28 @@ func (c *AdminController) UserAddRoute() {
  */
 func (c *AdminController) Post() {
 	args := map[string]string{}
-	body := c.Ctx.Input.RequestBody //接收raw body内容
-	json.Unmarshal(body, &args)
-	mobile := args["mobile"]
-	username := args["username"] // 只能接收url后面的参数，不能接收body中的参数
-	sex := args["sex"]
-	email := args["email"]
-	addr := args["addr"]
-	description := args["description"]
-	password := util.GeneratePassword(mobile)
-	createdAt := time.Now()
-	updatedAt := time.Now()
-
-	var user = new(User)
-	user.UserName = username
-	user.Gender, _ = strconv.Atoi(sex)
-	user.Mobile = mobile
-	user.Email = email
-	user.Addr = addr
-	user.Description = description
-	user.Password = password
-	user.CreatedAt = createdAt
-	user.UpdatedAt = updatedAt
-
-	id, err := user.Save()
-	if nil != err {
+	body := c.Ctx.Input.RequestBody
+	if err := json.Unmarshal(body, &args); err != nil{
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
-	} else {
-		c.Data["json"] = SuccessData(id)
+	}else{
+		var user = new(User)
+		user.Account = args["account"]
+		user.UserName = args["username"]
+		user.Mobile = args["mobile"]
+		user.Email = args["email"]
+		user.Description = args["description"]
+		user.Password = util.GetMD5(args["password"])
+		user.CreatedAt = time.Now()
+		user.UpdatedAt = time.Now()
+
+		id, err := user.Save()
+		if nil != err {
+			logs.Error(err)
+			c.Data["json"] = ErrorData(err)
+		} else {
+			c.Data["json"] = SuccessData(id)
+		}
 	}
 	c.ServeJSON()
 }
@@ -145,30 +141,26 @@ func (c *AdminController) UserGet() {
  * 修改用户
  */
 func (c *AdminController) Put() {
-	userId, _ := c.GetInt("userId")
-	username := c.GetString("username") // 只能接收url后面的参数，不能接收body中的参数
-	email := c.GetString("email")
-	gender, _ := c.GetInt("gender")
-	mobile := c.GetString("mobile")
-	addr := c.GetString("addr")
-	desc := c.GetString("desc")
-	updatedAt := time.Now()
+	userID, err := c.GetInt("userId")
+	if err != nil{
+		logs.Error("user id err:%s", err)
+		c.Data["json"] = ErrorData(err)
+	}
 
 	var user = new(User)
-	user.Id = uint(userId)
-	user.UserName = username
-	user.Gender = gender
-	user.Email = email
-	user.Mobile = mobile
-	user.Addr = addr
-	user.Description = desc
-	user.UpdatedAt = updatedAt
-	upId, err := user.Update()
+	user.Id = uint(userID)
+	user.Account = c.GetString("account")
+	user.UserName = c.GetString("username")
+	user.Email = c.GetString("email")
+	user.Mobile = c.GetString("mobile")
+	user.Description = c.GetString("description")
+	user.UpdatedAt = time.Now()
+	upID, err := user.Update()
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	} else {
-		c.Data["json"] = SuccessData(upId)
+		c.Data["json"] = SuccessData(upID)
 	}
 	c.ServeJSON()
 }
@@ -190,9 +182,9 @@ func (c *AdminController) UserList() {
 	start, _ := c.GetInt("start")
 	perPage, _ := c.GetInt("perPage")
 	user := new(User)
-	var userVOList = make([]UserVO, 10)
+	var userList = make([]UserSt, 10)
 	var param = make(map[string]string)
-	param["mobile"] = args
+	param["account"] = args
 	param["username"] = args
 	list, total, err := user.GetAllByCondition(param, start, perPage)
 	if nil != err {
@@ -200,15 +192,14 @@ func (c *AdminController) UserList() {
 		c.Data["json"] = ErrorData(err)
 	} else {
 		for index, u := range list {
-			userVo := new(UserVO)
-			userVo.User = u
-			userVo.Gender = SexMap[u.Gender]
-			userVo.CreatedAt = u.CreatedAt.Format("2006-01-02 15:04:05")
-			userVo.UpdatedAt = u.UpdatedAt.Format("2006-01-02 15:04:05")
-			userVOList = append(userVOList[:index], *userVo)
+			userSt := new(UserSt)
+			userSt.User = u
+			userSt.CreatedAt = u.CreatedAt.Format("2006-01-02 15:04:05")
+			userSt.UpdatedAt = u.UpdatedAt.Format("2006-01-02 15:04:05")
+			userList = append(userList[:index], *userSt)
 		}
-		data := map[string]any{
-			"result": userVOList,
+		data := map[string]interface{}{
+			"result": userList,
 			"total":  total,
 		}
 		c.Data["json"] = SuccessData(data)
@@ -256,7 +247,7 @@ func (c *AdminController) GetLogs() {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	} else {
-		data := map[string]any{
+		data := map[string]interface{}{
 			"result": list,
 			"total":  total,
 		}
