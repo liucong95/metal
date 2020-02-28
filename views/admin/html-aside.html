@@ -30,6 +30,7 @@
           <i class="fa fa-dashboard"></i> <span>首页</span>
         </a>
       </li>
+      {{if eq (.account) "admin" }}
       <li class="treeview menu-open">
         <a href="#">
           <i class="fa fa-users"></i>
@@ -41,6 +42,7 @@
           <li><a href="/admin/user-list"><i class="fa fa-circle-o text-aqua"></i>用户列表</a></li>
         </ul>
       </li>
+      {{ end }}
       <li class="treeview menu-open">
         <a href="#">
           <i class="fa fa-user-secret"></i>

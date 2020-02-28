@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"regexp"
+
 	"github.com/astaxie/beego/logs"
 	"metal/controllers/permissions"
 	"metal/models"
@@ -36,28 +38,34 @@ func (c *AdminBaseController) Prepare() {
 	if session != nil {
 		userPermission := session.(*UserPermission)
 		c.Data["username"] = userPermission.User.UserName
+		c.Data["account"] = userPermission.User.Account
 		ctrl, runMethod := c.GetControllerAndAction() // 获取controller和method
 		requestPermission := ctrl + ":" + runMethod
 		logs.Info(">>run-method:", ctrl+":"+runMethod)
-		privileges := session.(*UserPermission).Privileges
-		hasPermission := true
-		//需要权限
-		if permissions.NeedPermission[requestPermission] {
+		privileges := userPermission.Privileges
+
+		//不需要权限
+		if _,ok := permissions.InvaildPermission[requestPermission]; ok{
 			return
-			hasPermission = false
-			for _, pri := range privileges {
-				if pri != requestPermission {
-					hasPermission = false
-				} else {
-					hasPermission = true
-					break
-				}
+		}
+
+		//需要权限认证
+		hasPermission := false
+		for _, priPattern := range privileges {
+			if priPattern == "*"{
+				hasPermission = true
+				break
 			}
-			if !hasPermission {
-				logs.Info("权限不足")
-				c.Data["json"] = ErrorMsg("权限不足")
-				c.ServeJSON()
+
+			hasPermission,_ = regexp.MatchString(priPattern, requestPermission)
+			if hasPermission {
+				break
 			}
+		}
+		if !hasPermission {
+			logs.Info("权限不足")
+			c.Data["json"] = ErrorMsg("权限不足")
+			c.ServeJSON()
 		}
 	}
 }

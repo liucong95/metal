@@ -17,12 +17,12 @@ func (c *OfficialController) WidgetList() {
 	c.TplName = "admin/widget-list.html"
 }
 
-func (c *AdminController) TemplatesRoute() {
+func (c *OfficialController) TemplatesRoute() {
 	c.TplName = "admin/official-list.html"
 }
 
 //@router /official/add [post]
-func (c *AdminController) CreateTemplate() {
+func (c *OfficialController) CreateTemplate() {
 	name := c.GetString("name")
 	category := c.GetString("category")
 	url := c.GetString("url")
@@ -36,7 +36,7 @@ func (c *AdminController) CreateTemplate() {
 }
 
 //@router /official [get]
-func (c *AdminController) TemplateList() {
+func (c *OfficialController) TemplateList() {
 	args := c.GetString("search") // 获取所有参数
 	start, _ := c.GetInt("start")
 	perPage, _ := c.GetInt("perPage")
@@ -60,7 +60,7 @@ func (c *AdminController) TemplateList() {
 }
 
 //@router /official/view/:id [get]
-func (c *AdminController) TemplateView() {
+func (c *OfficialController) TemplateView() {
 	tid := c.Ctx.Input.Param(":id")
 	id, _ := strconv.Atoi(tid)
 	official := new(Official)

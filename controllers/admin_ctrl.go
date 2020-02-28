@@ -118,29 +118,28 @@ func (c *AdminController) Post() {
 	c.ServeJSON()
 }
 
-/**
- * 通过如下方式获取路由参数
- * /admin/user/:id
- * c.Ctx.Input.Param(":id")
- */
+//UserGet ...
 func (c *AdminController) UserGet() {
-	idstr := c.Ctx.Input.Param(":id")
-	id, _ := strconv.Atoi(idstr)
-	user := new(User)
-	user.Id = uint(id)
-	userObj, err := user.GetById()
-	if err != nil {
+	id, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	if err != nil{
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
+	}else{
+		user := new(User)
+		user.Id = uint(id)
+		userObj, err := user.GetById()
+		if err != nil {
+			logs.Error(err)
+			c.Data["json"] = ErrorData(err)
+		}else{
+			c.Data["json"] = SuccessData(userObj)
+		}
 	}
-	c.Data["json"] = SuccessData(userObj)
 	c.ServeJSON()
 }
 
-/**
- * 修改用户
- */
-func (c *AdminController) Put() {
+//UserModify 修改用户
+func (c *AdminController) UserModify() {
 	userID, err := c.GetInt("userId")
 	if err != nil{
 		logs.Error("user id err:%s", err)
@@ -155,7 +154,16 @@ func (c *AdminController) Put() {
 	user.Mobile = c.GetString("mobile")
 	user.Description = c.GetString("description")
 	user.UpdatedAt = time.Now()
-	upID, err := user.Update()
+
+	var upID int64 = 0
+	password := c.GetString("password")
+	if len(password) != 0{
+		user.Password = util.GetMD5(password)
+		upID, err = user.UpdateWithPwd()
+	}else{
+		upID, err = user.Update()
+	}
+
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
@@ -207,20 +215,31 @@ func (c *AdminController) UserList() {
 	c.ServeJSON()
 }
 
-/**
- * 删除用户
- */
-func (c *AdminController) DeleteUser() {
+//ForbiddenUser 禁用/启用
+func (c *AdminController) ForbiddenUser() {
 	id, _ := c.GetInt("userId")
-	var user = new(User)
-	user.Id = uint(id)
-	user.Status = 0
-	id64, err := user.Delete()
-	if nil != err {
-		logs.Error(err)
-		c.Data["json"] = ErrorData(err)
-	} else {
-		c.Data["json"] = SuccessData(id64)
+	session := c.GetSession("loginUser")
+	userPermission := session.(*UserPermission)
+	if id == int(userPermission.User.Id) {
+		c.Data["json"] = ErrorMsg("不能禁用自己")
+	}else{
+		var user = new(User)
+		user.Id = uint(id)
+		user.GetById()
+
+		if user.Status == 0{
+			user.Status = 1
+		}else{
+			user.Status = 0
+		}
+		
+		_, err := user.UpdateStatus()
+		if nil != err {
+			logs.Error(err)
+			c.Data["json"] = ErrorData(err)
+		} else {
+			c.Data["json"] = SuccessData(user.Status)
+		}
 	}
 	c.ServeJSON()
 }

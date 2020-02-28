@@ -10,12 +10,12 @@ import (
 	"time"
 )
 // GroupController 用户权限管理
-type GroupController struct {
+type AuthorityController struct {
 	AdminBaseController
 }
 
 // AddUserRole 用户添加权限
-func (c *GroupController) AddUserRole() {
+func (c *AuthorityController) AddUserRole() {
 	defer func() {
 		if err := recover(); err != nil {
 			c.Data["json"] = ErrorData(err.(error))
@@ -26,11 +26,10 @@ func (c *GroupController) AddUserRole() {
 		UserId uint
 		Roles  []uint
 	}
-	err:=json.Unmarshal(c.Ctx.Input.RequestBody, &args)
-	if err!=nil {
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &args); err!=nil {
 		panic(err)
 	}
-	logs.Info("参数：", args)
+
 	UserID := args.UserId
 	if UserID == 0 {
 		panic(errors.New("userId不能为空"))
@@ -39,23 +38,62 @@ func (c *GroupController) AddUserRole() {
 	if len(roleIds) == 0 {
 		panic(errors.New("roleId不能为空"))
 	}
-	for _, roleID := range roleIds {
-		var userGroup = new(Authority)
-		userGroup.UserId = UserID
-		userGroup.RoleId = roleID
-		userGroup.CreatedAt = time.Now()
-		userGroup.UpdatedAt = time.Now()
-		_, err := userGroup.Save()
-		if nil != err {
-			logs.Error(err)
-			panic(err)
+
+	var authority Authority
+	oldRoles,err := authority.GetUserAuthorityList(UserID)
+	if err != nil{
+		panic(err)
+	}
+
+	//添加新的
+	for _,roleID := range roleIds {
+		isExist := false
+		for _,role := range oldRoles{
+			if roleID == role.RoleId{
+				isExist = true
+				break
+			}
+		}
+
+		//添加新的
+		if !isExist{
+			var userGroup = new(Authority)
+			userGroup.UserId = UserID
+			userGroup.RoleId = roleID
+			userGroup.CreatedAt = time.Now()
+			userGroup.UpdatedAt = time.Now()
+			_, err := userGroup.Save()
+			if nil != err {
+				logs.Error(err)
+				panic(err)
+			}
+		}
+	}
+
+	//删除旧的
+	for _,role := range oldRoles {
+		isExist := false
+		for _,roleID := range roleIds{
+			if role.RoleId == roleID{
+				isExist = true
+				break
+			}
+		}
+
+		//删除旧的
+		if !isExist{
+			_, err := role.Delete()
+			if nil != err {
+				logs.Error(err)
+				panic(err)
+			}
 		}
 	}
 	c.Data["json"] = SuccessData(nil)
 }
 
 // GetUserRoles 获取用户权限
-func (c *GroupController) GetUserRoles() {
+func (c *AuthorityController) GetUserRoles() {
 	uid, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	if err != nil{
 		logs.Error("get uid,err:%s",err)

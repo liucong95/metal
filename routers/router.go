@@ -14,38 +14,48 @@ func init() {
 	//admin管理后台路由配置
 	ns := beego.NewNamespace("/admin",
 
+		//主界面
 		beego.NSRouter("/", &controllers.AdminController{}, "get:Welcome"),
+		//登录界面
 		beego.NSRouter("/login", &controllers.AdminController{}, "get:Login"),
+		//登录
 		beego.NSRouter("/to-login", &controllers.AdminController{}, "post:ToLogin"),
+		//登出
 		beego.NSRouter("/login-out", &controllers.AdminController{}, "get:LoginOut"),
+		//主界面
 		beego.NSRouter("/welcome", &controllers.AdminController{}, "get:Welcome"),
 
+		//用户列表界面
 		beego.NSRouter("/user-list", &controllers.AdminController{}, "get:UserListRoute"),
-		beego.NSRouter("/user-add", &controllers.AdminController{}, "get:UserAddRoute"),
-		beego.NSRouter("/user", &controllers.AdminController{}),
-		beego.NSRouter("/user/delete", &controllers.AdminController{}, "delete,post:DeleteUser"),
-		beego.NSRouter("/user/:id", &controllers.AdminController{}, "get:UserGet"),
+		//拉取用户列表
 		beego.NSRouter("/users", &controllers.AdminController{}, "get:UserList"),
-		beego.NSRouter("/user-group", &controllers.UserGroupController{}),
-
-		beego.NSRouter("/user/groups", &controllers.GroupController{}, "post:AddUserRole"),
-		beego.NSRouter("/user-roles/:id", &controllers.GroupController{}, "get:GetUserRoles"),
-
+		//添加用户
+		beego.NSRouter("/user-add", &controllers.AdminController{}, "get:UserAddRoute"),
+		//获取用户信息
+		beego.NSRouter("/user/:id", &controllers.AdminController{}, "get:UserGet"),
+		//修改用户信息
+		beego.NSRouter("/user/modify", &controllers.AdminController{}, "put:UserModify"),
+		//禁用用户
+		beego.NSRouter("/user/forbidden", &controllers.AdminController{}, "delete,post:ForbiddenUser"),
+		//获取用户权限
+		beego.NSRouter("/user-roles/:id", &controllers.AuthorityController{}, "get:GetUserRoles"),
+		//修改用户权限
+		beego.NSRouter("/user-roles/modify", &controllers.AuthorityController{}, "post:AddUserRole"),
+		
+		//帖子界面
 		beego.NSRouter("/article-route", &controllers.ArticleController{}, "get:CreateArticleRoute"),
+		//创建帖子
 		beego.NSRouter("/article-create", &controllers.ArticleController{}, "post:CreateArticle"),
+		//帖子列表界面
 		beego.NSRouter("/articles-route", &controllers.ArticleController{}, "get:ArticlesRoute"),
+		//拉取帖子列表
 		beego.NSRouter("/articles-list", &controllers.ArticleController{}, "get:ArticlesList"),
+		//编辑帖子界面
 		beego.NSRouter("/article-edit-route/:id", &controllers.ArticleController{}, "get:ArticleEditRoute"),
+		//修改帖子
 		beego.NSRouter("/article-edit/:id", &controllers.ArticleController{}, "put:ArticleEdit"),
+		//删除帖子
 		beego.NSRouter("/article-delete/:id", &controllers.ArticleController{}, "delete:ArticleDelete"),
-		/*
-		//也可以使用注解自动路由
-		beego.NSInclude(
-			&controllers.GroupController{},
-			&controllers.AdminController{},
-			&controllers.JobCountController{},
-			&controllers.OfficialController{},
-		),*/
 	)
 	//注册namespace
 	beego.AddNamespace(ns)

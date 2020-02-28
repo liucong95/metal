@@ -124,8 +124,15 @@ func (user *User) Update() (int64, error) {
 	return id, err
 }
 
-//Delete 通过id删除用户
-func (user *User) Delete() (int64, error) {
+//UpdateWithPwd 通过id修改用户
+func (user *User) UpdateWithPwd() (int64, error) {
+	o := orm.NewOrm()
+	id, err := o.Update(user, "account", "username", "password", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
+	return id, err
+}
+
+//UpdateStatus 修改状态
+func (user *User) UpdateStatus() (int64, error) {
 	o := orm.NewOrm()
 	id, err := o.Update(user, "status") // 要修改的对象和需要修改的字段
 	if err != nil {

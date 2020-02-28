@@ -262,17 +262,14 @@ CREATE TABLE `role` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='可以给一个角色很多权限，也可以通过很多角色组合来拥有很多权限';
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='可以给一个角色很多权限，也可以通过很多角色组合来拥有很多权限';
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
-INSERT INTO `role` VALUES ('1', 'AdminController:UserList,AdminController:UserListRoute', '管理员', '2018-04-21 14:00:18', '2018-04-21 14:00:23');
-INSERT INTO `role` VALUES ('2', 'AdminController:UserListRoute', '普通管理员', '2018-04-21 14:00:15', '2018-04-21 14:00:21');
-INSERT INTO `role` VALUES ('3', 'AdminController:POST', '添加用户', '2018-04-20 13:29:49', '2018-04-20 13:29:52');
-INSERT INTO `role` VALUES ('4', 'AdminController:PUT', '编辑用户', '2018-06-11 13:05:02', '2018-06-11 13:05:05');
-INSERT INTO `role` VALUES ('5', 'AdminController:DeleteUser', '删除用户', '2018-06-11 13:07:02', '2018-06-11 13:07:07');
-INSERT INTO `role` VALUES ('6', 'AdminController:UserList', '用户列表', '2018-06-11 13:09:09', '2018-06-11 13:09:12');
+INSERT INTO `role` VALUES ('1', '*', '管理员', '2018-04-21 14:00:18', '2018-04-21 14:00:23');
+INSERT INTO `role` VALUES ('2', 'ArticleController:*,OfficialController:*', '空间业务查看/发表', '2018-04-21 14:00:18', '2018-04-21 14:00:23');
+INSERT INTO `role` VALUES ('3', 'ArticleController:ArticlesRoute,ArticleController:ArticlesList', '空间业务查看', '2018-04-21 14:00:15', '2018-04-21 14:00:21');
 
 -- ----------------------------
 -- Table structure for `user`
@@ -317,11 +314,7 @@ CREATE TABLE `authority` (
 -- ----------------------------
 -- Records of authority
 -- ----------------------------
-INSERT INTO `authority` VALUES ('6', '1', '3', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
-INSERT INTO `authority` VALUES ('7', '1', '1', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
-INSERT INTO `authority` VALUES ('8', '1', '2', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
-INSERT INTO `authority` VALUES ('9', '1', '4', '2018-06-11 13:10:25', '2018-06-11 13:10:28');
-INSERT INTO `authority` VALUES ('10', '1', '5', '2018-06-11 13:10:38', '2018-06-11 13:10:40');
-INSERT INTO `authority` VALUES ('11', '1', '6', '2018-06-11 13:10:50', '2018-06-11 13:10:55');
-INSERT INTO `authority` VALUES ('12', '2', '3', '2018-11-01 01:31:22', '2018-11-01 01:31:22');
+INSERT INTO `authority` VALUES ('1', '1', '1', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
+INSERT INTO `authority` VALUES ('2', '2', '2', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
+INSERT INTO `authority` VALUES ('3', '3', '3', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
 

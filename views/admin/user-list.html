@@ -143,6 +143,10 @@ desired effect
                             <input type="text" class="form-control" id="account" name="account" placeholder="account" disabled>
                         </div>
                         <div class="form-group">
+                            <label for="password">new password</label>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="password">
+                        </div>
+                        <div class="form-group">
                             <label for="name">name</label>
                             <input type="text" class="form-control" id="username" name="username"
                                 placeholder="username">
@@ -272,10 +276,15 @@ desired effect
                     { data: 'created_at' },
                     { data: 'updated_at' },
                     {
-                        data: 'Account',
+                        data: 'status',
                         render: function (data, type, row) {
+                            var status = '<button class="btn btn-sm btn-danger J-delete">禁用</button>'
+                            if (data == 0){
+                                status = '<button class="btn btn-sm btn-success J-delete">启用</button>'
+                            }
+
                             var html = '<button class="btn btn-sm btn-primary J-update">编辑</button>'
-                                + '<button class="btn btn-sm btn-danger J-delete">禁用</button>'
+                                + status
                                 + '<button class="btn btn-sm btn-info J-permission">权限</button>'
                             return html;
                         }
@@ -289,42 +298,48 @@ desired effect
             //删除
             $("#userlist").on("click", ".J-delete", function () {
                 var id = $(this).closest("tr").attr("id");
-                if (confirm("确定删除？")) {
-                    $.ajax({
-                        url: '/admin/user/delete',
-                        type: 'post', //GET
-                        async: true,    //或false,是否异步
-                        data: {
-                            userId: id
-                        },
-                        timeout: 5000,    //超时时间
-                        dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
-                        beforeSend: function (xhr) {
-                            console.log('发送前')
-                        },
-                        success: function (data, textStatus, jqXHR) {
-                            if (data.code == 1) {
-                                layer.msg(data.msg, { icon: 5 });
-                                return
-                            }
-                            layer.msg("删除成功！", { icon: 6 });
-                            userList.ajax.reload();
-                        },
-                        error: function (xhr, textStatus) {
-                            console.log('错误')
-                        },
-                        complete: function () {
-                            console.log('结束')
+                $.ajax({
+                    url: '/admin/user/forbidden',
+                    type: 'post', //GET
+                    async: true,    //或false,是否异步
+                    data: {
+                        status: status,
+                        userId: id
+                    },
+                    timeout: 5000,    //超时时间
+                    dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
+                    beforeSend: function (xhr) {
+                        console.log('发送前')
+                    },
+                    success: function (data, textStatus, jqXHR) {
+                        if (data.code == 1) {
+                            layer.msg(data.msg, { icon: 5 });
+                            return
                         }
-                    })
-                }
+                        if (data == 0){
+                            layer.msg("禁用成功！", { icon: 6 });
+                        }else{
+                            layer.msg("启用成功！", { icon: 6 });
+                        }
+                        
+                        userList.ajax.reload();
+                    },
+                    error: function (xhr, textStatus) {
+                        console.log('错误')
+                    },
+                    complete: function () {
+                        console.log('结束')
+                    }
+                })
+                
             });
             //修改
             $("#userlist").on("click", ".J-update", function () {
                 var id = $(this).closest("tr").attr("id");
                 $.get("/admin/user/" + id, function (data) {
                     $("#userId").val(id);
-                    $("#account").val(data.data.account);
+                    $("#account").val(data.data.Account);
+                    $("#password").val("");
                     $("#username").val(data.data.user_name);
                     $("#email").val(data.data.email);
                     $("#mobile").val(data.data.mobile);
@@ -338,16 +353,17 @@ desired effect
                         content: $("#update-dialog"),
                         yes: function (index, layero) {
                             $.ajax({
-                                url: '/admin/user',
+                                url: '/admin/user/modify',
                                 type: 'PUT', //GET
                                 async: true,    //或false,是否异步
                                 data: {
                                     userId: $("#userId").val(),
+                                    password: $("#password").val(),
                                     account: $("#account").val(),
                                     username: $("#username").val(),
                                     email: $("#email").val(),
                                     mobile: $("#mobile").val(),
-                                    desc: $("#desc").val()
+                                    description: $("#desc").val()
                                 },
                                 timeout: 5000,    //超时时间
                                 dataType: 'json',    //返回的数据格式：json/xml/html/script/jsonp/text
@@ -400,7 +416,7 @@ desired effect
                                 roles[i] = parseInt($(this).val());
                             });
                             $.ajax({
-                                url: '/admin/user/groups',
+                                url: '/admin/user-roles/modify',
                                 type: 'POST', //GET
                                 async: true,    //或false,是否异步
                                 data: JSON.stringify({
