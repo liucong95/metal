@@ -38,7 +38,6 @@ func (c *AdminBaseController) Prepare() {
 	if session != nil {
 		userPermission := session.(*UserPermission)
 		c.Data["username"] = userPermission.User.UserName
-		c.Data["account"] = userPermission.User.Account
 		ctrl, runMethod := c.GetControllerAndAction() // 获取controller和method
 		requestPermission := ctrl + ":" + runMethod
 		logs.Info(">>run-method:", ctrl+":"+runMethod)

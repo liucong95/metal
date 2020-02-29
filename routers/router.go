@@ -31,7 +31,8 @@ func init() {
 		beego.NSRouter("/users", &controllers.AdminController{}, "get:UserList"),
 		//添加用户
 		beego.NSRouter("/user-add", &controllers.AdminController{}, "get:UserAddRoute"),
-		//获取用户信息
+		beego.NSRouter("/user-add", &controllers.AdminController{}, "post:AddUser"),
+		//获取用户信息 
 		beego.NSRouter("/user/:id", &controllers.AdminController{}, "get:UserGet"),
 		//修改用户信息
 		beego.NSRouter("/user/modify", &controllers.AdminController{}, "put:UserModify"),

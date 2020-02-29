@@ -87,10 +87,8 @@ func (c *AdminController) UserAddRoute() {
 	c.TplName = "admin/user-add.html"
 }
 
-/**
- * 新建用户
- */
-func (c *AdminController) Post() {
+//AddUser 新建用户
+func (c *AdminController) AddUser() {
 	args := map[string]string{}
 	body := c.Ctx.Input.RequestBody
 	if err := json.Unmarshal(body, &args); err != nil{
