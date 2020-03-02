@@ -1,4 +1,4 @@
-package service
+package article
 
 import (
 	"github.com/astaxie/beego/logs"

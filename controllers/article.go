@@ -8,7 +8,7 @@ import (
 	"github.com/astaxie/beego/logs"
 	
 	"metal/models"
-	"metal/service"
+	"metal/service/article"
 )
 
 //ArticleController 帖子
@@ -43,8 +43,7 @@ func (c *ArticleController) CreateArticle() {
 	article.Status = 1
 	article.CreatedAt = time.Now()
 	article.UpdatedAt = time.Now()
-	articleService := service.NewService()
-	_, err := articleService.Save(article)
+	_, err := article.Save()
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
@@ -62,16 +61,19 @@ func (c *ArticleController) ArticlesRoute() {
 
 //ArticlesList 文章列表接口
 func (c *ArticleController) ArticlesList() {
-	args := c.GetString("search") // 获取所有参数
-	start, _ := c.GetInt("start")
-	perPage, _ := c.GetInt("perPage")
-	article := new(models.Article)
+	
+	//args := c.GetString("search") // 获取所有参数
+	start, _ := c.GetUint32("start")
+	perPage, _ := c.GetUint32("perPage")
+	
+	/*
 	param := map[string]string{
 		"status": "1,0",
 		"title":  args,
-	}
+	}*/
 
-	list, total, err := article.GetArticlesByCondition(param, start, perPage)
+	list, total, err := article.GetMomentList(0,10086,1583147054, 0, start, perPage)
+	//list, total, err := models.GetArticlesByCondition(param, int(start), int(perPage))
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)

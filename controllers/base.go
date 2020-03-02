@@ -51,13 +51,15 @@ func (c *AdminBaseController) Prepare() {
 		userPermission := session.(*UserPermission)
 		c.Data["username"] = userPermission.User.UserName
 		ctrl, runMethod := c.GetControllerAndAction() // 获取controller和method
+
+		//登录模块不需要权限
+		if ctrl == "LoginController" {
+			return
+		}
+
 		requestPermission := ctrl + ":" + runMethod
 		logs.Info(">>run-method:", ctrl+":"+runMethod)
 		privileges := userPermission.Privileges
-
-		//暂时不需要权限
-		return
-
 		//需要权限认证
 		hasPermission := false
 		for _, priPattern := range privileges {

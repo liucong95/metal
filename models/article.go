@@ -39,7 +39,7 @@ func (model *Article) Save() (int64, error) {
 }
 
 //GetArticlesByCondition ...
-func (model *Article) GetArticlesByCondition(param map[string]string, pageIndex, pageSize int) (articles []Article, total int64, returnError error) {
+func GetArticlesByCondition(param map[string]string, pageIndex, pageSize int) (articles []Article, total int64, returnError error) {
 	o := orm.NewOrm()
 	var condition = ""
 	if param["status"] != "" {
