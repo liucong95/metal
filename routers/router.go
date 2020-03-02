@@ -39,9 +39,9 @@ func init() {
 		//禁用用户
 		beego.NSRouter("/user/forbidden", &controllers.AdminController{}, "delete,post:ForbiddenUser"),
 		//获取用户权限
-		beego.NSRouter("/user-roles/:id", &controllers.AuthorityController{}, "get:GetUserRoles"),
+		beego.NSRouter("/user-roles/:id", &controllers.PrivilegeController{}, "get:GetUserRoles"),
 		//修改用户权限
-		beego.NSRouter("/user-roles/modify", &controllers.AuthorityController{}, "post:AddUserRole"),
+		beego.NSRouter("/user-roles/modify", &controllers.PrivilegeController{}, "post:AddUserRole"),
 		
 		//帖子界面
 		beego.NSRouter("/article-route", &controllers.ArticleController{}, "get:CreateArticleRoute"),

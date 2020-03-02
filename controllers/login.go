@@ -40,7 +40,7 @@ func (c *LoginController) ToLogin() {
 		}
 		var privileges []string
 		for _, v := range roleList {
-			strArr := strings.Split(v.Authority, ",")
+			strArr := strings.Split(v.Privileges, ",")
 			privileges = append(privileges, strArr...)
 		}
 		userPermission := new(UserPermission)

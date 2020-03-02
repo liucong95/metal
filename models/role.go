@@ -11,7 +11,7 @@ import (
 type Role struct {
 	ID        uint      `json:"id"`
 	Description    string `json:"description"`
-	Authority      string `json:"authority"`
+	Privileges      string `json:"privileges"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
@@ -41,7 +41,7 @@ func GetRolesAndUserPermission(userID int) (allRoles []Role, userRoles []uint, r
 	}()
 	go func() {
 		defer wg.Done()
-		_, err := o.Raw("SELECT role_id FROM authority WHERE user_id = ? ORDER BY id DESC;", userID).QueryRows(&userRoles)
+		_, err := o.Raw("SELECT role_id FROM privileges WHERE user_id = ? ORDER BY id DESC;", userID).QueryRows(&userRoles)
 		if nil != err {
 			returnErr = err
 		}

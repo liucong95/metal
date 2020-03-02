@@ -7,7 +7,6 @@ import (
 	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
 
-	"metal/controllers/permissions"
 	"metal/models"
 )
 
@@ -56,10 +55,8 @@ func (c *AdminBaseController) Prepare() {
 		logs.Info(">>run-method:", ctrl+":"+runMethod)
 		privileges := userPermission.Privileges
 
-		//不需要权限
-		if _,ok := permissions.InvaildPermission[requestPermission]; ok{
-			return
-		}
+		//暂时不需要权限
+		return
 
 		//需要权限认证
 		hasPermission := false

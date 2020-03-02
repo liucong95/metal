@@ -257,7 +257,7 @@ INSERT INTO `log` VALUES ('4', '登录IP:222.209.182.112，物理地址：中国
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `authority` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
+  `privileges` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '' COMMENT '权限列表',
   `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL COMMENT '说明',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -298,23 +298,23 @@ INSERT INTO `user` VALUES ('2', 'user1', '21232f297a57a5a743894a0e4a801fc3', '�
 INSERT INTO `user` VALUES ('3', 'user2', '21232f297a57a5a743894a0e4a801fc3', '施工图人力', '110', '18611118146@139.com', '1', '', '2017-07-27 03:25:01', '2018-02-28 11:57:56');
 INSERT INTO `user` VALUES ('4', '10701897527', '21232f297a57a5a743894a0e4a801fc3', '缇欧', '110', 'huo@gmail.com', '1', '而喝了酒而温柔你感觉', '2017-07-27 09:00:43', '2018-03-19 11:10:50');
 -- ----------------------------
--- Table structure for `authority`
+-- Table structure for `privilege`
 -- ----------------------------
-DROP TABLE IF EXISTS `authority`;
-CREATE TABLE `authority` (
+DROP TABLE IF EXISTS `privilege`;
+CREATE TABLE `privilege` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL,
   `role_id` int(11) NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `idx_user_authority` (`user_id`,`role_id`)
+  UNIQUE KEY `idx_user_privilege` (`user_id`,`role_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- ----------------------------
--- Records of authority
+-- Records of privilege
 -- ----------------------------
-INSERT INTO `authority` VALUES ('1', '1', '1', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
-INSERT INTO `authority` VALUES ('2', '2', '2', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
-INSERT INTO `authority` VALUES ('3', '3', '3', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
+INSERT INTO `privilege` VALUES ('1', '1', '1', '2018-04-28 17:35:30', '2018-04-28 17:35:32');
+INSERT INTO `privilege` VALUES ('2', '2', '2', '2018-04-28 13:16:33', '2018-04-28 13:16:36');
+INSERT INTO `privilege` VALUES ('3', '3', '3', '2018-06-11 13:10:12', '2018-06-11 13:10:15');
 

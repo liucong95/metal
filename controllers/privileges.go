@@ -10,13 +10,13 @@ import (
 
 	"metal/models"
 )
-// AuthorityController 用户权限管理
-type AuthorityController struct {
+// PrivilegeController 用户权限管理
+type PrivilegeController struct {
 	AdminBaseController
 }
 
 // AddUserRole 用户添加权限
-func (c *AuthorityController) AddUserRole() {
+func (c *PrivilegeController) AddUserRole() {
 	defer func() {
 		if err := recover(); err != nil {
 			c.Data["json"] = ErrorData(err.(error))
@@ -40,7 +40,7 @@ func (c *AuthorityController) AddUserRole() {
 		panic(errors.New("roleId不能为空"))
 	}
 
-	oldRoles,err := models.GetUserAuthorityList(args.UserID)
+	oldRoles,err := models.GetUserPrivilegeList(args.UserID)
 	if err != nil{
 		panic(err)
 	}
@@ -57,7 +57,7 @@ func (c *AuthorityController) AddUserRole() {
 
 		//添加新的
 		if !isExist{
-			var userGroup = new(models.Authority)
+			var userGroup = new(models.Privilege)
 			userGroup.UserId = args.UserID
 			userGroup.RoleId = roleID
 			userGroup.CreatedAt = time.Now()
@@ -93,7 +93,7 @@ func (c *AuthorityController) AddUserRole() {
 }
 
 // GetUserRoles 获取用户权限
-func (c *AuthorityController) GetUserRoles() {
+func (c *PrivilegeController) GetUserRoles() {
 	uid, err := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	if err != nil{
 		logs.Error("get uid,err:%s",err)
