@@ -1,12 +1,14 @@
 package controllers
 
 import (
-	"github.com/astaxie/beego/logs"
-	"log"
-	. "metal/models" // 点操作符导入的包可以省略包名直接使用公有属性和方法
-	"metal/service"
 	"strconv"
 	"time"
+	"log"
+
+	"github.com/astaxie/beego/logs"
+	
+	"metal/models"
+	"metal/service"
 )
 
 //ArticleController 帖子
@@ -35,7 +37,7 @@ func (c *ArticleController) CreateArticle() {
 	if content == "" {
 		log.Panic("content不能为空")
 	}
-	article := new(Article)
+	article := new(models.Article)
 	article.Title = title
 	article.Content = content
 	article.Status = 1
@@ -63,7 +65,7 @@ func (c *ArticleController) ArticlesList() {
 	args := c.GetString("search") // 获取所有参数
 	start, _ := c.GetInt("start")
 	perPage, _ := c.GetInt("perPage")
-	article := new(Article)
+	article := new(models.Article)
 	param := map[string]string{
 		"status": "1,0",
 		"title":  args,
@@ -85,10 +87,10 @@ func (c *ArticleController) ArticlesList() {
 
 //ArticleEditRoute 编辑文章路由 @router /article-edit-route/:id [get]
 func (c *ArticleController) ArticleEditRoute() {
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	article.Id = uint(artId)
-	article.GetById()
+	article := new(models.Article)
+	artID, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	article.Id = uint(artID)
+	article.GetByID()
 	c.Data["article"] = article
 	c.TplName = "admin/article-edit.html"
 }
@@ -101,11 +103,11 @@ func (c *ArticleController) ArticleEdit() {
 			c.ServeJSON()
 		}
 	}()
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	article := new(models.Article)
+	artID, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
 	title := c.GetString("title")
 	content := c.GetString("content")
-	article.Id = uint(artId)
+	article.Id = uint(artID)
 	article.Title = title
 	article.Content = content
 	article.UpdatedAt = time.Now()
@@ -122,9 +124,9 @@ func (c *ArticleController) ArticleEdit() {
 
 //ArticleDelete 删除文章接口
 func (c *ArticleController) ArticleDelete() {
-	article := new(Article)
-	artId, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
-	article.Id = uint(artId)
+	article := new(models.Article)
+	artID, _ := strconv.Atoi(c.Ctx.Input.Param(":id"))
+	article.Id = uint(artID)
 	article.Delete()
 	c.Data["json"] = SuccessData(nil)
 	c.ServeJSON()

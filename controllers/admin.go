@@ -2,13 +2,13 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/astaxie/beego/logs"
-	. "metal/models" // 点操作符导入的包可以省略包名直接使用公有属性和方法
-	"metal/util"
 	"strconv"
-	"strings"
 	"time"
+
+	"github.com/astaxie/beego/logs"
+
+	"metal/models"
+	"metal/util"
 )
 
 //AdminController ...
@@ -16,73 +16,12 @@ type AdminController struct {
 	AdminBaseController
 }
 
-//Login 。。。
-func (c *AdminController) Login() {
-	c.TplName = "admin/login.html"
-}
-
-//ToLogin 登录
-func (c *AdminController) ToLogin() {
-	var account = c.GetString("account")
-	var password = c.GetString("password")
-
-	user := &User{Account: account}
-	err := user.GetByAccount()
-	if err != nil {
-		logs.Error(err)
-		c.Data["json"] = ErrorData(err)
-	} else if user.Status == 0 {
-		c.Data["json"] = ErrorMsg("该账号已禁用，不能登录！")
-	} else if user.Password != util.GetMD5(password) {
-		c.Data["json"] = ErrorMsg("密码不正确！")
-	} else {
-		group := new(Authority)
-		roleList, err := group.GetGroupByUserId(user.Id)
-		if err != nil {
-			c.Data["json"] = ErrorData(err)
-		}
-		var privileges []string
-		for _, v := range roleList {
-			strArr := strings.Split(v.Authority, ",")
-			privileges = append(privileges, strArr...)
-		}
-		userPermission := new(UserPermission)
-		userPermission.User = *user
-		userPermission.Privileges = privileges
-		c.SetSession("loginUser", userPermission)
-		// c.Ctx.Input.IP()获取到的是Nginx内网ip，需要在Nginx配置proxy_set_header Remote_addr $remote_addr;
-		ip := c.Ctx.Input.Header("Remote_addr")
-		// ip = "103.14.252.249"
-		if ip != "" {
-			//第三方接口不稳定，会阻塞整体，所以放到协程中
-			go func() {
-				ipBody := new(util.IPBody)
-				err := util.GetIpGeography(ip, ipBody)
-				if err == nil {
-					loginLog := new(Log)
-					// mark := fmt.Sprintf("登录IP:%s，物理地址：%s %s %s %s", ip, ipBody.Data.Country, ipBody.Data.Area, ipBody.Data.Region, ipBody.Data.City)
-					mark := fmt.Sprintf("登录IP:%s，物理地址：%s", ip, ipBody.Content.Address)
-					loginLog.Save(mark)
-				}
-			}()
-		}
-		c.Data["json"] = SuccessData(nil)
-	}
-	c.ServeJSON()
-}
-
-/**
- * 登出
- */
-func (c *AdminController) LoginOut() {
-	c.DelSession("loginUser")
-	c.Redirect("/admin/login", 302)
-}
-
+//Welcome 主页
 func (c *AdminController) Welcome() {
 	c.TplName = "admin/index.html"
 }
 
+//UserAddRoute 新建用户
 func (c *AdminController) UserAddRoute() {
 	c.TplName = "admin/user-add.html"
 }
@@ -95,7 +34,7 @@ func (c *AdminController) AddUser() {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	}else{
-		var user = new(User)
+		var user = new(models.User)
 		user.Account = args["account"]
 		user.UserName = args["username"]
 		user.Mobile = args["mobile"]
@@ -123,14 +62,12 @@ func (c *AdminController) UserGet() {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	}else{
-		user := new(User)
-		user.Id = uint(id)
-		userObj, err := user.GetById()
+		user,err := models.GetUserByID(id)
 		if err != nil {
 			logs.Error(err)
 			c.Data["json"] = ErrorData(err)
 		}else{
-			c.Data["json"] = SuccessData(userObj)
+			c.Data["json"] = SuccessData(user)
 		}
 	}
 	c.ServeJSON()
@@ -144,8 +81,8 @@ func (c *AdminController) UserModify() {
 		c.Data["json"] = ErrorData(err)
 	}
 
-	var user = new(User)
-	user.Id = uint(userID)
+	var user = new(models.User)
+	user.ID = uint(userID)
 	user.Account = c.GetString("account")
 	user.UserName = c.GetString("username")
 	user.Email = c.GetString("email")
@@ -171,34 +108,28 @@ func (c *AdminController) UserModify() {
 	c.ServeJSON()
 }
 
-/**
- * 用户列表路由
- */
+ //UserListRoute 用户列表路由
 func (c *AdminController) UserListRoute() {
 	c.Data["Title"] = "用户列表"
 	c.TplName = "admin/user-list.html"
 }
 
-/**
- * 用户列表接口
- * /admin/users
- */
+ //UserList 用户列表接口
 func (c *AdminController) UserList() {
 	args := c.GetString("search") //搜索框
 	start, _ := c.GetInt("start")
 	perPage, _ := c.GetInt("perPage")
-	user := new(User)
-	var userList = make([]UserSt, 10)
+	var userList = make([]models.UserSt, 10)
 	var param = make(map[string]string)
 	param["account"] = args
 	param["username"] = args
-	list, total, err := user.GetAllByCondition(param, start, perPage)
+	list, total, err := models.GetUserAllByCondition(param, start, perPage)
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
 	} else {
 		for index, u := range list {
-			userSt := new(UserSt)
+			userSt := new(models.UserSt)
 			userSt.User = u
 			userSt.CreatedAt = u.CreatedAt.Format("2006-01-02 15:04:05")
 			userSt.UpdatedAt = u.UpdatedAt.Format("2006-01-02 15:04:05")
@@ -218,47 +149,47 @@ func (c *AdminController) ForbiddenUser() {
 	id, _ := c.GetInt("userId")
 	session := c.GetSession("loginUser")
 	userPermission := session.(*UserPermission)
-	if id == int(userPermission.User.Id) {
+	if id == int(userPermission.User.ID) {
 		c.Data["json"] = ErrorMsg("不能禁用自己")
-	}else{
-		var user = new(User)
-		user.Id = uint(id)
-		user.GetById()
+		c.ServeJSON()
+		return
+	}
+	
+	user,err := models.GetUserByID(id)
+	if err != nil{
+		logs.Error("get user err:%s, id:%d", err, id)
+		c.Data["json"] = ErrorData(err)
+		c.ServeJSON()
+		return
+	}
 
-		if user.Status == 0{
-			user.Status = 1
-		}else{
-			user.Status = 0
-		}
-		
-		_, err := user.UpdateStatus()
-		if nil != err {
-			logs.Error(err)
-			c.Data["json"] = ErrorData(err)
-		} else {
-			c.Data["json"] = SuccessData(user.Status)
-		}
+	if user.Status == 0{
+		user.Status = 1
+	}else{
+		user.Status = 0
+	}
+	
+	_, err = user.UpdateStatus()
+	if nil != err {
+		logs.Error(err)
+		c.Data["json"] = ErrorData(err)
+	} else {
+		c.Data["json"] = SuccessData(user.Status)
 	}
 	c.ServeJSON()
 }
 
-/**
- * 日志列表路由
- */
-// @router /logs-route
+//LogsRoute 日志列表路由
 func (c *AdminController) LogsRoute() {
 	c.Data["Title"] = "日志列表"
 	c.TplName = "admin/logs.html"
 }
 
-/**
- * 日志列表接口
- */
-// @router /logs [get]
+//GetLogs 日志列表接口
 func (c *AdminController) GetLogs() {
 	start, _ := c.GetInt("start")
 	perPage, _ := c.GetInt("perPage")
-	var logModel = new(Log)
+	var logModel = new(models.Log)
 	list, total, err := logModel.GetLogs(start, perPage)
 	if nil != err {
 		logs.Error(err)

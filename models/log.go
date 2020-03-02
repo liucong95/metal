@@ -8,8 +8,10 @@ import (
 )
 
 type Log struct {
-	BaseModel
+	Id        uint      `json:"id"`
 	Mark string `json:"mark"`
+	CreatedAt 	time.Time `json:"created_at"`
+	UpdatedAt 	time.Time `json:"updated_at"`
 }
 
 func init() {

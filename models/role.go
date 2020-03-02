@@ -1,18 +1,24 @@
 package models
 
 import (
-	"github.com/astaxie/beego/orm"
+	"time"
 	"sync"
+
+	"github.com/astaxie/beego/orm"
 )
 
+//Role ...
 type Role struct {
-	BaseModel
+	ID        uint      `json:"id"`
 	Description    string `json:"description"`
 	Authority      string `json:"authority"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
+//UserGroups ...
 type UserGroups struct {
-	Role_id     uint   `json:"roleId"`
+	RoleID     uint   `json:"roleId"`
 	Description string `json:"description"`
 	Checked     bool   `json:"checked"`
 }
@@ -22,7 +28,7 @@ func init() {
 }
 
 // GetRolesAndUserPermission 获取所有权限和单个用户拥有的权限
-func (role *Role) GetRolesAndUserPermission(userId int) (allRoles []Role, userRoles []uint, returnErr error) {
+func GetRolesAndUserPermission(userID int) (allRoles []Role, userRoles []uint, returnErr error) {
 	o := orm.NewOrm()
 	var wg sync.WaitGroup
 	wg.Add(2)
@@ -35,7 +41,7 @@ func (role *Role) GetRolesAndUserPermission(userId int) (allRoles []Role, userRo
 	}()
 	go func() {
 		defer wg.Done()
-		_, err := o.Raw("SELECT role_id FROM authority WHERE user_id = ? ORDER BY id DESC;", userId).QueryRows(&userRoles)
+		_, err := o.Raw("SELECT role_id FROM authority WHERE user_id = ? ORDER BY id DESC;", userID).QueryRows(&userRoles)
 		if nil != err {
 			returnErr = err
 		}

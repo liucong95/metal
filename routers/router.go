@@ -9,22 +9,22 @@ import (
 func init() {
 	//如果登录过期，则返回登录界面
 	beego.InsertFilter("/",beego.BeforeRouter,controllers.HasAdminPermission,false) //过滤器
-	beego.Router("/",&controllers.AdminController{}, "get:Login")
+	beego.Router("/",&controllers.LoginController{}, "get:Login")
 
 	//admin管理后台路由配置
 	ns := beego.NewNamespace("/admin",
 
+		//登录界面
+		beego.NSRouter("/login", &controllers.LoginController{}, "get:Login"),
+		//登录
+		beego.NSRouter("/to-login", &controllers.LoginController{}, "post:ToLogin"),
+		//登出
+		beego.NSRouter("/login-out", &controllers.LoginController{}, "get:LoginOut"),
+
 		//主界面
 		beego.NSRouter("/", &controllers.AdminController{}, "get:Welcome"),
-		//登录界面
-		beego.NSRouter("/login", &controllers.AdminController{}, "get:Login"),
-		//登录
-		beego.NSRouter("/to-login", &controllers.AdminController{}, "post:ToLogin"),
-		//登出
-		beego.NSRouter("/login-out", &controllers.AdminController{}, "get:LoginOut"),
 		//主界面
 		beego.NSRouter("/welcome", &controllers.AdminController{}, "get:Welcome"),
-
 		//用户列表界面
 		beego.NSRouter("/user-list", &controllers.AdminController{}, "get:UserListRoute"),
 		//拉取用户列表

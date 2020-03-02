@@ -1,21 +1,20 @@
 package models
 
 import (
-	"github.com/astaxie/beego/logs"
+	"time"
 	"strconv"
 	"sync"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/logs"
 )
 
-//性别
+//SexMap 性别
 var SexMap = map[int]string{0: "女", 1: "男"}
 
-/**
- * 模型与数据库字段多少不一定要匹配
- */
+//User 用户
 type User struct {
-	BaseModel
+	ID        uint      `json:"id"`
 	Account		string `jsong:"account"`
 	Password    string `json:"password"`
 	UserName    string `json:"user_name"`
@@ -23,8 +22,11 @@ type User struct {
 	Email       string `json:"email"`
 	Description string `json:"description"`
 	Status      int    `json:"status"` // 0不可用，1可用
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
+//UserSt ...
 type UserSt struct {
 	User
 	CreatedAt string `json:"created_at"`
@@ -40,42 +42,66 @@ func init() {
 
 //Save 添加用户
 func (user *User) Save() (int64, error) {
-	//	var o Ormer
 	o := orm.NewOrm()
-	// 每次操作都需要新建一个Ormer变量，当然也可以全局设置
-	// 需要 切换数据库 和 事务处理 的话，不要使用全局保存的 Ormer 对象。
 	return o.Insert(user)
 }
 
-//GetById 通过id查找用户
-func (user *User) GetById() (*User, error) {
+//Update 通过id修改用户
+func (user *User) Update() (int64, error) {
+	o := orm.NewOrm()
+	id, err := o.Update(user, "account", "username", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
+	return id, err
+}
+//UpdateWithPwd 通过id修改用户
+func (user *User) UpdateWithPwd() (int64, error) {
+	o := orm.NewOrm()
+	id, err := o.Update(user, "account", "username", "password", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
+	return id, err
+}
+
+//UpdateStatus 修改状态
+func (user *User) UpdateStatus() (int64, error) {
+	o := orm.NewOrm()
+	id, err := o.Update(user, "status") // 要修改的对象和需要修改的字段
+	if err != nil {
+		return id, err
+	}
+
+	return id, nil
+}
+
+//GetUserByID 通过id查找用户
+func GetUserByID(userID int) (*User, error) {
+	user := &User{ID:uint(userID)}
 	o := orm.NewOrm()
 	err := o.Read(user, "id")
 	return user, err
 }
 
-//GetByName 通过用户名查找用户
-func (user *User) GetByName() error {
+//GetUserByName 通过用户名查找用户
+func GetUserByName(userName string) (*User,error) {
+	user := &User{UserName:userName}
 	o := orm.NewOrm()
 	err := o.Read(user, "username")
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return user, nil
 }
 
-//GetByAccount 通过手机号查找用户
-func (user *User) GetByAccount() error {
+//GetUserByAccount 通过手机号查找用户
+func GetUserByAccount(account string) (*User,error) {
+	user := &User{Account:account}
 	o := orm.NewOrm()
 	err := o.Read(user, "account")
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return user,nil
 }
 
-//GetAll 获取用户列表
-func (user *User) GetAll() ([]User, error) {
+//GetUserAll 获取用户列表
+func GetUserAll() ([]User, error) {
 	o := orm.NewOrm()
 	var users []User
 	num, err := o.Raw("SELECT * FROM user").QueryRows(&users)
@@ -84,8 +110,8 @@ func (user *User) GetAll() ([]User, error) {
 
 }
 
-//GetAllByCondition 获取用户列表
-func (user *User) GetAllByCondition(cond map[string]string, start, perPage int) (users []User, total int64, newError error) {
+//GetUserAllByCondition 获取用户列表
+func GetUserAllByCondition(cond map[string]string, start, perPage int) (users []User, total int64, newError error) {
 	o := orm.NewOrm()
 	var condition = " WHERE 1 "
 	if cond["account"] != "" {
@@ -115,29 +141,4 @@ func (user *User) GetAllByCondition(cond map[string]string, start, perPage int) 
 	}()
 	wg.Wait()
 	return users, total, newError
-}
-
-//Update 通过id修改用户
-func (user *User) Update() (int64, error) {
-	o := orm.NewOrm()
-	id, err := o.Update(user, "account", "username", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
-	return id, err
-}
-
-//UpdateWithPwd 通过id修改用户
-func (user *User) UpdateWithPwd() (int64, error) {
-	o := orm.NewOrm()
-	id, err := o.Update(user, "account", "username", "password", "email", "mobile", "description", "updated_at") // 要修改的对象和需要修改的字段
-	return id, err
-}
-
-//UpdateStatus 修改状态
-func (user *User) UpdateStatus() (int64, error) {
-	o := orm.NewOrm()
-	id, err := o.Update(user, "status") // 要修改的对象和需要修改的字段
-	if err != nil {
-		return id, err
-	}
-
-	return id, nil
 }

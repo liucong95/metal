@@ -1,19 +1,24 @@
 package models
 
 import (
-	"github.com/astaxie/beego/logs"
 	"sync"
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/logs"
 )
 
+//Article 帖子
 type Article struct {
-	BaseModel
+	Id        uint      `json:"id"`
 	Title   string `json:"title"`
 	Content string `json:"content"`
 	Status  uint8  `json:"status"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
+
+//ArticlePortal ...
 type ArticlePortal struct {
 	Article
 	Img string
@@ -24,6 +29,7 @@ func init() {
 	orm.RegisterModel(new(Article))
 }
 
+//Save ...
 func (model *Article) Save() (int64, error) {
 	o := orm.NewOrm()
 	model.Status = 1
@@ -32,6 +38,7 @@ func (model *Article) Save() (int64, error) {
 	return o.Insert(model)
 }
 
+//GetArticlesByCondition ...
 func (model *Article) GetArticlesByCondition(param map[string]string, pageIndex, pageSize int) (articles []Article, total int64, returnError error) {
 	o := orm.NewOrm()
 	var condition = ""
@@ -68,23 +75,28 @@ func (model *Article) GetArticlesByCondition(param map[string]string, pageIndex,
 	return articles, total, returnError
 }
 
-func (model *Article) GetById() error {
+//GetByID ...
+func (model *Article) GetByID() error {
 	o := orm.NewOrm()
 	err := o.Read(model, "id")
 	return err
 }
 
+//Update ...
 func (model *Article) Update() (int64, error) {
 	o := orm.NewOrm()
 	id, err := o.Update(model, "title", "content", "updated_at")
 	return id, err
 }
+
+//Delete ...
 func (model *Article) Delete() (int64, error) {
 	o := orm.NewOrm()
 	id, err := o.Delete(model)
 	return id, err
 }
 
+//GetCategory ...
 func (model *Article) GetCategory() ([]ArticlePortal, error) {
 	o := orm.NewOrm()
 	titles := make([]ArticlePortal, 1)

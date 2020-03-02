@@ -1,20 +1,22 @@
 package models
 
 import (
-	"github.com/astaxie/beego/logs"
 	"sync"
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/astaxie/beego/logs"
 )
 
 //Official 官方账号
 type Official struct {
-	BaseModel
+	ID        uint      `json:"id"`
 	Name     string `json:"name"`
 	Category string `json:"category"`
 	Status   int  `json:"status"`
 	Url      string `json:"url"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 func init() {

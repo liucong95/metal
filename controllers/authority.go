@@ -1,15 +1,16 @@
 package controllers
 
-//包名并非必须和文件夹名相同，但是按照惯例最后一个路径名和包名一致
 import (
-	"encoding/json"
-	"errors"
-	"github.com/astaxie/beego/logs"
-	. "metal/models"
 	"strconv"
 	"time"
+	"errors"
+	"encoding/json"
+	
+	"github.com/astaxie/beego/logs"
+
+	"metal/models"
 )
-// GroupController 用户权限管理
+// AuthorityController 用户权限管理
 type AuthorityController struct {
 	AdminBaseController
 }
@@ -23,24 +24,23 @@ func (c *AuthorityController) AddUserRole() {
 		c.ServeJSON()
 	}()
 	var args struct {
-		UserId uint
-		Roles  []uint
+		UserID uint `json:"UserId"`
+		Roles  []uint `json:"Roles"`
 	}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &args); err!=nil {
 		panic(err)
 	}
 
-	UserID := args.UserId
-	if UserID == 0 {
+	if args.UserID == 0 {
 		panic(errors.New("userId不能为空"))
 	}
+
 	roleIds := args.Roles
 	if len(roleIds) == 0 {
 		panic(errors.New("roleId不能为空"))
 	}
 
-	var authority Authority
-	oldRoles,err := authority.GetUserAuthorityList(UserID)
+	oldRoles,err := models.GetUserAuthorityList(args.UserID)
 	if err != nil{
 		panic(err)
 	}
@@ -57,8 +57,8 @@ func (c *AuthorityController) AddUserRole() {
 
 		//添加新的
 		if !isExist{
-			var userGroup = new(Authority)
-			userGroup.UserId = UserID
+			var userGroup = new(models.Authority)
+			userGroup.UserId = args.UserID
 			userGroup.RoleId = roleID
 			userGroup.CreatedAt = time.Now()
 			userGroup.UpdatedAt = time.Now()
@@ -99,20 +99,19 @@ func (c *AuthorityController) GetUserRoles() {
 		logs.Error("get uid,err:%s",err)
 	}
 
-	role := new(Role)
-	allRoles, userRoles, err := role.GetRolesAndUserPermission(uid)
+	allRoles, userRoles, err := models.GetRolesAndUserPermission(uid)
 	logs.Debug("allRoles:", allRoles)
 	logs.Debug("userRoles:", userRoles)
 	if nil != err {
 		c.Data["json"] = ErrorData(err)
 	}
-	userPermissions := make([]UserGroups, 0, 20)
+	userPermissions := make([]models.UserGroups, 0, 20)
 	for index, item := range allRoles {
-		userPremis := new(UserGroups)
-		userPremis.Role_id = uint(item.Id)
+		userPremis := new(models.UserGroups)
+		userPremis.RoleID = uint(item.ID)
 		userPremis.Description = item.Description
 		for _, rid := range userRoles {
-			if item.Id == rid {
+			if item.ID == rid {
 				userPremis.Checked = true
 				break
 			}

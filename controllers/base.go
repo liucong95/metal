@@ -3,12 +3,18 @@ package controllers
 import (
 	"regexp"
 
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/context"
 	"github.com/astaxie/beego/logs"
+
 	"metal/controllers/permissions"
 	"metal/models"
-
-	"github.com/astaxie/beego/context"
 )
+
+//BaseController .
+type BaseController struct {
+	beego.Controller
+}
 
 //AdminBaseController ...
 type AdminBaseController struct {
@@ -19,6 +25,13 @@ type AdminBaseController struct {
 type UserPermission struct {
 	User       models.User
 	Privileges []string //特权
+}
+
+//HasIndexPermission 前端权限验证
+var HasIndexPermission = func(ctx *context.Context) {
+	// TODO 做一些验证
+	var i int = 10
+	print(i)
 }
 
 //HasAdminPermission 后台权限验证
@@ -67,4 +80,46 @@ func (c *AdminBaseController) Prepare() {
 			c.ServeJSON()
 		}
 	}
+}
+
+//Result 接口返回数据标准化
+type Result struct {
+	Code int         `json:"code"`
+	Data interface{} `json:"data"`
+	Msg  string      `json:"msg"`
+}
+
+//ErrorMsg 返回错误信息，code是可选的自定义代码
+func ErrorMsg(msg string, code ...int) Result {
+	var r Result
+	if len(code) > 0 {
+		r.Code = code[0]
+	} else {
+		r.Code = 1
+	}
+	r.Msg = msg
+	r.Data = nil
+	return r
+}
+
+//ErrorData ErrorMsg和ErrorData作用一样，只不过是为了方便调用方不用手动msg.Error()，只需传error类型即可
+func ErrorData(msg error, code ...int) Result {
+	var r Result
+	if len(code) > 0 {
+		r.Code = code[0]
+	} else {
+		r.Code = 1
+	}
+	r.Msg = msg.Error()
+	r.Data = nil
+	return r
+}
+
+//SuccessData ...
+func SuccessData(data interface{}) Result {
+	var r Result
+	r.Code = 0
+	r.Msg = "ok"
+	r.Data = data
+	return r
 }
