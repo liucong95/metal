@@ -16,14 +16,21 @@ type AdminController struct {
 	AdminBaseController
 }
 
-//Welcome 主页
-func (c *AdminController) Welcome() {
-	c.TplName = "admin/index.html"
-}
-
 //UserAddRoute 新建用户
 func (c *AdminController) UserAddRoute() {
 	c.TplName = "admin/user-add.html"
+}
+
+//UserListRoute 用户列表路由
+func (c *AdminController) UserListRoute() {
+	c.Data["Title"] = "用户列表"
+	c.TplName = "admin/user-list.html"
+}
+
+//LogsRoute 日志列表路由
+func (c *AdminController) LogsRoute() {
+	c.Data["Title"] = "日志列表"
+	c.TplName = "admin/logs.html"
 }
 
 //AddUser 新建用户
@@ -33,25 +40,49 @@ func (c *AdminController) AddUser() {
 	if err := json.Unmarshal(body, &args); err != nil{
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
-	}else{
-		var user = new(models.User)
-		user.Account = args["account"]
-		user.UserName = args["username"]
-		user.Mobile = args["mobile"]
-		user.Email = args["email"]
-		user.Description = args["description"]
-		user.Password = util.GetMD5(args["password"])
-		user.CreatedAt = time.Now()
-		user.UpdatedAt = time.Now()
-
-		id, err := user.Save()
-		if nil != err {
-			logs.Error(err)
-			c.Data["json"] = ErrorData(err)
-		} else {
-			c.Data["json"] = SuccessData(id)
-		}
+		c.ServeJSON()
+		return
 	}
+
+	account := args["account"]
+	if account == "" {
+		c.Data["json"] = ErrorMsg("account cant be null!")
+		c.ServeJSON()
+		return
+	}
+
+	passwd := args["password"]
+	if passwd == "" {
+		c.Data["json"] = ErrorMsg("password cant be null!")
+		c.ServeJSON()
+		return
+	}
+
+	name := args["username"]
+	if passwd == "" {
+		c.Data["json"] = ErrorMsg("username cant be null!")
+		c.ServeJSON()
+		return
+	}
+
+	var user = new(models.User)
+	user.Account = account
+	user.Password = util.GetMD5(passwd)
+	user.UserName = name
+	user.Mobile = args["mobile"]
+	user.Email = args["email"]
+	user.Description = args["description"]
+	user.CreatedAt = time.Now()
+	user.UpdatedAt = time.Now()
+
+	id, err := user.Save()
+	if nil != err {
+		logs.Error(err)
+		c.Data["json"] = ErrorData(err)
+	} else {
+		c.Data["json"] = SuccessData(id)
+	}
+	
 	c.ServeJSON()
 }
 
@@ -82,7 +113,7 @@ func (c *AdminController) UserModify() {
 	}
 
 	var user = new(models.User)
-	user.ID = uint(userID)
+	user.Id = uint(userID)
 	user.Account = c.GetString("account")
 	user.UserName = c.GetString("username")
 	user.Email = c.GetString("email")
@@ -106,12 +137,6 @@ func (c *AdminController) UserModify() {
 		c.Data["json"] = SuccessData(upID)
 	}
 	c.ServeJSON()
-}
-
- //UserListRoute 用户列表路由
-func (c *AdminController) UserListRoute() {
-	c.Data["Title"] = "用户列表"
-	c.TplName = "admin/user-list.html"
 }
 
  //UserList 用户列表接口
@@ -149,7 +174,7 @@ func (c *AdminController) ForbiddenUser() {
 	id, _ := c.GetInt("userId")
 	session := c.GetSession("loginUser")
 	userPermission := session.(*UserPermission)
-	if id == int(userPermission.User.ID) {
+	if id == int(userPermission.User.Id) {
 		c.Data["json"] = ErrorMsg("不能禁用自己")
 		c.ServeJSON()
 		return
@@ -177,12 +202,6 @@ func (c *AdminController) ForbiddenUser() {
 		c.Data["json"] = SuccessData(user.Status)
 	}
 	c.ServeJSON()
-}
-
-//LogsRoute 日志列表路由
-func (c *AdminController) LogsRoute() {
-	c.Data["Title"] = "日志列表"
-	c.TplName = "admin/logs.html"
 }
 
 //GetLogs 日志列表接口

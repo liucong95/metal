@@ -108,10 +108,10 @@ func (c *PrivilegeController) GetUserRoles() {
 	userPermissions := make([]models.UserGroups, 0, 20)
 	for index, item := range allRoles {
 		userPremis := new(models.UserGroups)
-		userPremis.RoleID = uint(item.ID)
+		userPremis.RoleID = uint(item.Id)
 		userPremis.Description = item.Description
 		for _, rid := range userRoles {
-			if item.ID == rid {
+			if item.Id == rid {
 				userPremis.Checked = true
 				break
 			}

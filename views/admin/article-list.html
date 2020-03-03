@@ -5,7 +5,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
 -->
 <html>
 <head>
-<title>文章列表</title>
+<title>帖子列表</title>
 {{template "admin/html-head.html" .}}
 </head>
 <!--
@@ -41,14 +41,9 @@ desired effect
         <!-- Content Header (Page header) -->
         <section class="content-header">
             <h1>
-                Data Tables
-                <small>advanced tables</small>
+                帖子列表
+                <small>moment tables</small>
             </h1>
-            <ol class="breadcrumb">
-                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
-                <li><a href="#">Tables</a></li>
-                <li class="active">Data tables</li>
-            </ol>
         </section>
 
         <!-- Main content -->
@@ -57,7 +52,31 @@ desired effect
                 <div class="col-xs-12">
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">Data Table With Full Features</h3>
+                            <div>
+                            <div class="col-xs-2">
+                                <select class="form-control" id="reqType">
+                                    <option value="1">全服热点</option>
+                                    <option value="0">个人空间</option>
+                                    <option value="3">话题</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-4">
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon">玩家ID</span>
+                                    <input type="text" class="form-control" name="roleID">
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group input-group">
+                                    <span class="input-group-addon">主题ID</span>
+                                    <input type="text" class="form-control" name="topicID">
+                                </div>
+                            </div>
+                            <div class="col-xs-1">
+                                <button id="search" class="btn btn-default" type="button"><i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
@@ -65,8 +84,9 @@ desired effect
                                 <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>玩家ID</th>
                                     <th>玩家姓名</th>
-                                    <th>主题</th>
+                                    <th>话题</th>
                                     <th>内容</th>
                                     <th>热门</th>
                                     <th>评论</th>
@@ -128,7 +148,7 @@ desired effect
             },
             paging: true,
             lengthChange: false,
-            searching: true,
+            searching: false,
             ordering: true,
             info: true,
             autoWidth: false,
@@ -139,7 +159,9 @@ desired effect
                     draw: data.draw,
                     perPage: data.length,
                     start: data.start,
-                    search: data.search.value
+                    type: $("#reqType option:selected").val(),
+                    roleID: $("input[name=roleID]").val(),
+                    topicID: $("input[name=topicID]").val()
                 };
                 $.ajax({
                     url: '/admin/articles-list',
@@ -174,6 +196,7 @@ desired effect
             rowId: 'StMoment.UllMomentID',//自动设置行id
             columns: [
                 {data: 'StMoment.UllMomentID'},
+                {data: 'StMoment.UllRoleID'},
                 {data: 'StMoment.SzRoleName'},
                 {
                     data: 'StMoment.UllTopicID',
@@ -192,27 +215,32 @@ desired effect
                     data: 'AstComment',
                     render: function (data, type, row) {
                         if (data == null){
-                            return ""
-                        }
-                        
-                        var str = "<select>";
-                        for(i in data){
-                            str += '<option value="html">' + data[i].SzRoleName + ":" +
-                                data[i].SzContent + '</option>'
+                            return "<li>暂无评论</li>"
                         }
 
-                        str += '</select>';
+                        var str =   '<div class="btn-group"><button data-toggle="dropdown" class="btn btn-defalut dropdown-toggle" aria-expanded="false">' +
+                                    '最新评论' +
+                                    '<span class="caret"></span></button>' +
+                                    '<ul class="dropdown-menu">';
+                        for(i in data){
+                            str += '<li><a href="#">'+ data[i].SzRoleName + ':' + data[i].SzContent + '</a></li>';
+                        }
+
+                        str +=  '<li class="divider"></li>' +
+                                '<li><a href="#">查看更多</a></li>' + 
+                                '</ul></div>';
                         return str;
+                        
                     }
                 },
                 {
-                    data: 'DwTotalLikeNum',
+                    data: 'DwTotalCommentNum',
                     render: function (data, type, row) {
                         return data == null ? 0 : data
                     }
                 },
                 {
-                    data: 'DwTotalCommentNum',
+                    data: 'DwTotalLikeNum',
                     render: function (data, type, row) {
                         return data == null ? 0 : data
                     }
@@ -270,6 +298,10 @@ desired effect
                 })
             }
         });
+    
+        $('#search').on("click",function(){
+            articlelist.ajax.reload();
+        })
     })
 </script>
 </body>

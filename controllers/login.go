@@ -20,6 +20,11 @@ func (c *LoginController) Login() {
 	c.TplName = "admin/login.html"
 }
 
+//Welcome 主页
+func (c *LoginController) Welcome() {
+	c.TplName = "admin/index.html"
+}
+
 //ToLogin 登录
 func (c *LoginController) ToLogin() {
 	var account = c.GetString("account")
@@ -34,7 +39,7 @@ func (c *LoginController) ToLogin() {
 	} else if user.Password != util.GetMD5(password) {
 		c.Data["json"] = ErrorMsg("密码不正确！")
 	} else {
-		roleList, err := models.GetGroupByUserID(user.ID)
+		roleList, err := models.GetGroupByUserID(user.Id)
 		if err != nil {
 			c.Data["json"] = ErrorData(err)
 		}

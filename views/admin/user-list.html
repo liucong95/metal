@@ -221,10 +221,9 @@ desired effect
                         draw: data.draw,
                         perPage: data.length,
                         start: data.start,
-                        search: data.search.value
                     };
                     $.ajax({
-                        url: '/admin/users',
+                        url: '/admin/user-list',
                         type: 'GET', //GET
                         data: postData,
                         timeout: 5000,    //超时时间
@@ -256,7 +255,7 @@ desired effect
                 rowId: 'id',//自动设置行id
                 columns: [
                     { data: 'id' },
-                    { data: 'Account' },
+                    { data: 'account' },
                     { data: 'user_name' },
                     { data: 'mobile' },
                     { data: 'email' },
@@ -338,7 +337,7 @@ desired effect
                 var id = $(this).closest("tr").attr("id");
                 $.get("/admin/user/" + id, function (data) {
                     $("#userId").val(id);
-                    $("#account").val(data.data.Account);
+                    $("#account").val(data.data.account);
                     $("#password").val("");
                     $("#username").val(data.data.user_name);
                     $("#email").val(data.data.email);

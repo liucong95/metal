@@ -66,34 +66,18 @@ desired effect
                         <form role="form" method="post" action="" onsubmit="return false;">
                             <div class="box-body">
                                 <div class="form-group">
-                                    <label for="name">name</label>
+                                    <label for="username">name</label>
                                     <input type="text" class="form-control" id="username" name="username"
                                            placeholder="username">
                                 </div>
                                 <div class="form-group">
-                                    <label for="gender">gender</label>
-                                    <select name="sex" class="form-control">
-                                        <option value="0">女</option>
-                                        <option value="1">男</option>
-                                    </select>
+                                    <label for="head">头像</label>
+                                    <input type="text" class="form-control" id="head" name="head">
                                 </div>
                                 <div class="form-group">
-                                    <label for="mobile">mobile</label>
-                                    <input type="text" class="form-control" id="mobile" name="mobile"
-                                           placeholder="mobile">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">email</label>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="email">
-                                </div>
-                                <div class="form-group">
-                                    <label for="address">address</label>
-                                    <input type="text" class="form-control" id="address" name="addr" placeholder="addr">
-                                </div>
-                                <div class="form-group">
-                                    <label for="description">description</label>
-                                    <input type="text" class="form-control" id="description" name="description"
-                                           placeholder="description">
+                                    <label for="signature">signature</label>
+                                    <input type="text" class="form-control" id="signature" name="signature"
+                                           placeholder="signature">
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -146,7 +130,7 @@ desired effect
             }
             var idata = JSON.stringify(values)
             $.ajax({
-                url: '/admin/user',
+                url: '/admin/official-add',
                 type: 'post', //GET
                 async: true,    //或false,是否异步
                 data: idata,
@@ -161,6 +145,7 @@ desired effect
                         return
                     }
                     layer.msg(data.msg)
+                    window.location.replace("/admin/official-list-route");
                 },
                 error: function (xhr, textStatus) {
                     console.log('错误', textStatus)

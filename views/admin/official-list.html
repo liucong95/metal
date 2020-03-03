@@ -67,29 +67,18 @@ desired effect
 								<table id="dataList" class="table table-bordered table-striped">
 									<thead>
 										<tr>
-											<th>ID</th>
+											<th>id</th>
 											<th>name</th>
-											<th>category</th>
-											<th>status</th>
-											<th>createdAt</th>
-											<th>updatedAt</th>
+											<th>signature</th>
+											<th>访问数</th>
+											<th>评论数</th>
+											<th>点赞数</th>
 											<th width="120px">操作</th>
 										</tr>
 									</thead>
 									<tbody>
 										{{/*<tr><td></td></tr>*/}}
 									</tbody>
-									<tfoot>
-										<tr>
-											<th>ID</th>
-											<th>name</th>
-											<th>category</th>
-											<th>status</th>
-											<th>createdAt</th>
-											<th>updatedAt</th>
-											<th>操作</th>
-										</tr>
-									</tfoot>
 								</table>
 							</div>
 							<!-- /.box-body -->
@@ -177,7 +166,7 @@ desired effect
 				},
 				paging: true,
 				lengthChange: false,
-				searching: true,
+				searching: false,
 				ordering: true,
 				info: true,
 				autoWidth: false,
@@ -188,10 +177,9 @@ desired effect
 						draw: data.draw,
 						perPage: data.length,
 						start: data.start,
-						search: data.search.value
 					};
 					$.ajax({
-						url: '/admin/templates',
+						url: '/admin/official-list',
 						type: 'GET', //GET
 						data: postData,
 						timeout: 5000,    //超时时间
@@ -220,26 +208,31 @@ desired effect
 						}
 					})
 				},
-				rowId: 'id',//自动设置行id
+				rowId: 'UllRoleID',//自动设置行id
 				columns: [
-					{ data: 'id' },
-					{ data: 'name' },
-					{ data: 'category' },
-					{ data: 'status' },
-					{
-						data: 'created_at',
-						render: function (data, type, row) {
-							return moment(data).format("YYYY-MM-DD HH:mm:ss");
+					{ data: 'UllRoleID' },
+					{ data: 'StGameProFile.SzRoleName' },
+					{ data: 'StZoneProfile.SzSignature' },
+					{ 
+						data: 'DwVisitorCount',
+						render: function(data, type, row){
+							return data == null ? 0 : data
+						}
+					},
+					{ 
+						data: 'DwCommentCount',
+						render: function(data, type, row){
+							return data == null ? 0 : data
+						}
+					},
+					{ 
+						data: 'DwLikeCount',
+						render: function(data, type, row){
+							return data == null ? 0 : data
 						}
 					},
 					{
-						data: 'updated_at',
-						render: function (data, type, row) {
-							return moment(data).format("YYYY-MM-DD HH:mm:ss");
-						}
-					},
-					{
-						data: 'name',
+						data: 'UllRoleID',
 						render: function (data, type, row) {
 							var html = '<a class="" href="/admin/template/view/' + row.id + '">查看</a>';
 							html += '&nbsp;<a class="J-delete" href="/admin/template/' + row.id + '">删除</a>';
@@ -257,7 +250,7 @@ desired effect
 				var id = $(this).closest("tr").attr("id");
 				if (confirm("确定删除？")) {
 					$.ajax({
-						url: '/admin/templates/delete',
+						url: '/admin/official-forbidden',
 						type: 'post', //GET
 						async: true,    //或false,是否异步
 						data: {
@@ -291,7 +284,7 @@ desired effect
 				var category = $("#category").val();
 				var url = $("#url").val();
 				$.ajax({
-					url: '/admin/template/add',
+					url: '/admin/official-modify',
 					type: 'post', //GET
 					async: true,    //或false,是否异步
 					data: {

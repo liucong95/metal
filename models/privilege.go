@@ -48,7 +48,7 @@ func GetGroupByUserID(userID uint) ([]Role, error) {
 	o := orm.NewOrm()
 	var userGroups []Role
 	//var userGroups []orm.Params//orm.Params是一个map类型
-	_, err := o.Raw(`SELECT role.privilege from role
+	_, err := o.Raw(`SELECT role.privileges from role
 		INNER JOIN privilege ON role.id = privilege.role_id
 		WHERE privilege.user_id = ?;`, userID).QueryRows(&userGroups)
 	if nil != err {

@@ -14,8 +14,8 @@ var SexMap = map[int]string{0: "女", 1: "男"}
 
 //User 用户
 type User struct {
-	ID        uint      `json:"id"`
-	Account		string `jsong:"account"`
+	Id        	uint   `json:"id"`
+	Account		string `json:"account"`
 	Password    string `json:"password"`
 	UserName    string `json:"user_name"`
 	Mobile      string `json:"mobile"`
@@ -72,7 +72,7 @@ func (user *User) UpdateStatus() (int64, error) {
 
 //GetUserByID 通过id查找用户
 func GetUserByID(userID int) (*User, error) {
-	user := &User{ID:uint(userID)}
+	user := &User{Id:uint(userID)}
 	o := orm.NewOrm()
 	err := o.Read(user, "id")
 	return user, err

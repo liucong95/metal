@@ -20,15 +20,15 @@ func init() {
 		beego.NSRouter("/to-login", &controllers.LoginController{}, "post:ToLogin"),
 		//登出
 		beego.NSRouter("/login-out", &controllers.LoginController{}, "get:LoginOut"),
-
 		//主界面
-		beego.NSRouter("/", &controllers.AdminController{}, "get:Welcome"),
+		beego.NSRouter("/", &controllers.LoginController{}, "get:Welcome"),
 		//主界面
-		beego.NSRouter("/welcome", &controllers.AdminController{}, "get:Welcome"),
+		beego.NSRouter("/welcome", &controllers.LoginController{}, "get:Welcome"),
+		
 		//用户列表界面
-		beego.NSRouter("/user-list", &controllers.AdminController{}, "get:UserListRoute"),
+		beego.NSRouter("/user-list-route", &controllers.AdminController{}, "get:UserListRoute"),
 		//拉取用户列表
-		beego.NSRouter("/users", &controllers.AdminController{}, "get:UserList"),
+		beego.NSRouter("/user-list", &controllers.AdminController{}, "get:UserList"),
 		//添加用户
 		beego.NSRouter("/user-add", &controllers.AdminController{}, "get:UserAddRoute"),
 		beego.NSRouter("/user-add", &controllers.AdminController{}, "post:AddUser"),
@@ -57,6 +57,21 @@ func init() {
 		beego.NSRouter("/article-edit/:id", &controllers.ArticleController{}, "put:ArticleEdit"),
 		//删除帖子
 		beego.NSRouter("/article-delete/:id", &controllers.ArticleController{}, "delete:ArticleDelete"),
+
+		//官方账号界面
+		beego.NSRouter("/official-list-route", &controllers.OfficialController{}, "get:OfficialListRoute"),
+		//账号列表
+		beego.NSRouter("/official-list", &controllers.OfficialController{}, "get:GetOfficialList"),
+		//查看官方账号
+		beego.NSRouter("/official/:id", &controllers.OfficialController{}, "get:GetOfficialInfo"),
+		//添加官方账号
+		beego.NSRouter("/official-add-route", &controllers.OfficialController{}, "get:AddOfficialUserRoute"),
+		//添加官方账号
+		beego.NSRouter("/official-add", &controllers.OfficialController{}, "post:AddOfficialUser"),
+		//保存账号
+		beego.NSRouter("/official-modify", &controllers.OfficialController{}, "post:ModifyOfficialUserInfo"),
+		//禁用账号
+		beego.NSRouter("/official-forbidden", &controllers.OfficialController{}, "post:ForbiddenOfficialUser"),
 	)
 	//注册namespace
 	beego.AddNamespace(ns)

@@ -61,19 +61,26 @@ func (c *ArticleController) ArticlesRoute() {
 
 //ArticlesList 文章列表接口
 func (c *ArticleController) ArticlesList() {
-	
-	//args := c.GetString("search") // 获取所有参数
+	reqType,_ := c.GetInt32("type")
+	topicID,_ := c.GetUint64("topicID")
+	roleID,_ := c.GetUint64("roleID")
+	//个人空间
+	if reqType == 0 && roleID == 0{
+		logs.Error("role id cant be nil")
+		c.Data["json"] = ErrorMsg("玩家ID不能为空！")
+		c.ServeJSON()
+		return
+	}else if reqType == 3 && topicID == 0{
+		//主题
+		logs.Error("topic id cant be nil")
+		c.Data["json"] = ErrorMsg("主题ID不能为空！")
+		c.ServeJSON()
+		return
+	}
 	start, _ := c.GetUint32("start")
 	perPage, _ := c.GetUint32("perPage")
-	
-	/*
-	param := map[string]string{
-		"status": "1,0",
-		"title":  args,
-	}*/
 
-	list, total, err := article.GetMomentList(0,10086,1583147054, 0, start, perPage)
-	//list, total, err := models.GetArticlesByCondition(param, int(start), int(perPage))
+	list, total, err := article.GetMomentList(reqType,10086,roleID, topicID, start, start + perPage)
 	if nil != err {
 		logs.Error(err)
 		c.Data["json"] = ErrorData(err)
